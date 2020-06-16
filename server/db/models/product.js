@@ -1,0 +1,209 @@
+const Sequelize = require("sequelize");
+const db = require("../db");
+const { User } = require(".");
+
+module.export = db.define("product", {
+    title: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+            notEmpty: true,
+        },
+    },
+    price: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        validate: {
+            min: 0,
+        },
+    },
+    image: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: "default-image.png",
+    },
+    type: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: "Print",
+        validate: {
+            notEmpty: true,
+            isIn: [["Unique Artwork", "Print - Limited Edition", "Print"]],
+        },
+    },
+});
+
+//add data to seed.js
+const products = [
+    {
+        title: "Black is Beautiful",
+        price: 7500,
+        image: "Blackisbeautiful.jpg",
+        type: "Unique Artwork",
+    },
+    {
+        title: "Fraternity",
+        price: 7500,
+        image: "Fraternity.jpg",
+        type: "Unique Artwork",
+    },
+    {
+        title: "Shades of Pride",
+        price: 7500,
+        image: "ShadesofPride.jpg",
+        type: "Unique Artwork",
+    },
+    {
+        title: "Sweet Cabata",
+        price: 7500,
+        image: "SweetCabata.jpg",
+        type: "Unique Artwork",
+    },
+    {
+        title: "D J A M I L L A",
+        price: 200,
+        image: "DJAMILLA.png",
+        type: "Print",
+    },
+    {
+        title: "K E N Y A",
+        price: 200,
+        image: "KENYA.png",
+        type: "Print",
+    },
+
+    {
+        title: "N I S A A",
+        price: 200,
+        image: "NISAA.png",
+        type: "Print",
+    },
+
+    {
+        title: "O H S O",
+        price: 200,
+        image: "OHSO.png",
+        type: "Print",
+    },
+    {
+        title: "Kira",
+        price: 350,
+        image: "Kira.png",
+        type: "Print - Limited Edition",
+    },
+    {
+        title: "Rachel",
+        price: 350,
+        image: "Rachel.jpg",
+        type: "Print - Limited Edition",
+    },
+    {
+        title: "Sarah",
+        price: 350,
+        image: "Sarah.jpg",
+        type: "Print - Limited Edition",
+    },
+    {
+        title: "Yas",
+        price: 350,
+        image: "Yas.jpg",
+        type: "Print - Limited Edition",
+    },
+    {
+        title: "Empty Seat Series - Untitled III",
+        price: 3000,
+        image: "Untitled III.jpg",
+        type: "Unique Artwork",
+    },
+    {
+        title: "Empty Seat Series - Untitled IV",
+        price: 3000,
+        image: "Untitled IV.jpg",
+        type: "Unique Artwork",
+    },
+    {
+        title: "Empty Seat Series - Untitled IX",
+        price: 3000,
+        image: "Untitled IX.jpg",
+        type: "Unique Artwork",
+    },
+    {
+        title: "Empty Seat Series - Untitled VII",
+        price: 3000,
+        image: "Untitled VII.jpg",
+        type: "Unique Artwork",
+    },
+    {
+        title: "Cortez",
+        price: 2500,
+        image: "Cortez.jpg",
+        type: "Print - Limited Edition",
+    },
+    {
+        title: "Eternity",
+        price: 1500,
+        image: "Eternity.jpg",
+        type: "Print - Limited Edition",
+    },
+    {
+        title: "Living Room, Brownsville, Brooklyn",
+        price: 5000,
+        image: "LivingRoom_Brownsville_Brooklyn.jpg",
+        type: "Print - Limited Edition",
+    },
+    {
+        title: "Mickey & Friends",
+        price: 2000,
+        image: "Mickey&Friends.jpg",
+        type: "Print - Limited Edition",
+    },
+
+    {
+        title: "Anderson Paak",
+        price: 200,
+        image: "AndersonPaak.jpg",
+        type: "Print",
+    },
+    {
+        title: "Father",
+        price: 200,
+        image: "Father.png",
+        type: "Print",
+    },
+    {
+        title: "Jeremy O' Harris",
+        price: 200,
+        image: "JeremeyOHarris.png",
+        type: "Print",
+    },
+    {
+        title: "Kitty Cat",
+        price: 200,
+        image: "KittyCat.png",
+        type: "Print",
+    },
+    {
+        title: "MARIE/FEMME NOIR NUE COUCHEÉE #2",
+        price: 25000,
+        image: "MARIE/FEMME NOIR NUE COUCHEÉE 2  2014.png",
+        type: "Unique Artwork",
+    },
+    {
+        title: "NAOMI SIMS #2",
+        price: 7000,
+        image: "NAOMI SIMS_2_2018.png",
+        type: "Unique Artwork",
+    },
+    {
+        title: "NOVEMBER 197",
+        price: 13000,
+        image: "NOVEMBER 197 _2019.png",
+        type: "Unique Artwork",
+    },
+    {
+        title: "SISTER - SHUG AVERY BREAKFAST",
+        price: 30000,
+        image: "SISTER - SHUG AVERY BREAKFAST.png",
+        type: "Unique Artwork",
+    },
+];
