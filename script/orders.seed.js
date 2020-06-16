@@ -5,28 +5,24 @@ const db = require('../server/db/db');
 const orders = [
   {
     status: false,
-    totalPrice: 250,
-    totalQuantity: 1
+    isCart: false
+
   },
   {
     status: true,
-    totalPrice: 1000,
-    totalQuantity: 2
+    isCart: false
   },
   {
     status: false,
-    totalPrice: 500,
-    totalQuantity: 1
+    isCart: false
   },
   {
     status: true,
-    totalPrice: 2500,
-    totalQuantity: 3
+    isCart: false
   },
   {
     status: false,
-    totalPrice: 400,
-    totalQuantity: 4
+    isCart: false
   }
 ];
 
