@@ -2,12 +2,15 @@
 
 const db = require('../server/db');
 const arrayOfUsers = require('./seedUsers');
+const User = require('../server/db/models/user');
 
 async function seed() {
     await db.sync({ force: true });
     console.log('db synced!');
 
-    const users = await Promise.all(arrayOfUsers);
+    const users = await Promise.all(
+        arrayOfUsers.map((user) => User.create(user))
+    );
 
     console.log(`seeded ${users.length} users`);
     console.log(`seeded successfully`);
