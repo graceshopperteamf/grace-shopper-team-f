@@ -14,9 +14,13 @@ describe('User model', () => {
       let cody;
 
       beforeEach(async () => {
-        cody = await User.create({
-          email: 'cody@puppybook.com',
-          password: 'bones'
+        cody = await User.create(    {
+            name: 'Cody Tremblay',
+            email: 'Brent.Reichel5@yahoo.com',
+            password: 'bones',
+            mailingAddress: '10533 Pouros Club McLaughlinton, ID',
+            billingAddress: '123 Gingerbread Brooklyn, NY 34343',
+            phone: '987-232-7337',
         });
       });
 
