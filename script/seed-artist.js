@@ -1,22 +1,22 @@
 const artists = [
     {
-        name: "ANJEL - Boris Anje Tabufor",
+        name: 'ANJEL - Boris Anje Tabufor',
     },
-    { name: "Benny Bing" },
+    { name: 'Benny Bing' },
     {
-        name: "Claudia Saimbert",
-    },
-    {
-        name: "David Thuku",
+        name: 'Claudia Saimbert',
     },
     {
-        name: "Deana Lawson",
+        name: 'David Thuku',
     },
     {
-        name: "Micaiah Carter",
+        name: 'Deana Lawson',
     },
     {
-        name: "Mickalene Thomas",
+        name: 'Micaiah Carter',
+    },
+    {
+        name: 'Mickalene Thomas',
     },
 ];
 
