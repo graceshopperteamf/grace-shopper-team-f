@@ -1,7 +1,7 @@
-const db = require("../db");
-const User = require("./user");
-const Product = require("./product");
-const Artist = require("./artist");
+const db = require('../db');
+const User = require('./user');
+const Product = require('./product');
+const Artist = require('./artist');
 /**
  * If we had any associations to make, this would be a great place to put them!
  * ex. if we had another model called BlogPost, we might say:
@@ -17,16 +17,16 @@ const Artist = require("./artist");
  */
 //Associations
 
-User.hasMany(Order);
-Order.belongsTo(User);
-Product.belongsToMany(Order); //{through: Cart} ??
-Order.belongsToMany(Product); //{through: Cart} ??
-Product.hasMany(Artist);
-Artist.belongsTo(Product);
+// User.hasMany(Order);
+// Order.belongsTo(User);
+// Product.belongsToMany(Order); //{through: Cart} ??
+// Order.belongsToMany(Product); //{through: Cart} ??
+// Product.hasMany(Artist);
+// Artist.belongsTo(Product);
 
 module.exports = {
     db,
     User,
-    Product,
-    Artist,
+    // Product,
+    // Artist,
 };
