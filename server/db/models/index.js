@@ -17,6 +17,7 @@ Order.hasMany(OrderItem);
  * instead of: const User = require('../db/models/user')
  */
 module.exports = {
+  db,
   User,
   Order,
   OrderItem

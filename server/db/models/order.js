@@ -5,6 +5,7 @@ const Order = db.define('order', {
   // orderId: {
   //   type: Sequelize.INT,
   // },
+  //min max no negative
   status: {
     type: Sequelize.BOOLEAN,
     defaultValue: false
@@ -14,14 +15,18 @@ const Order = db.define('order', {
     type: Sequelize.INTEGER,
     allowNull: false,
     validate: {
-      notEmpty: true
+      notEmpty: true,
+      min: 0,
+      max: Infinity
     }
   },
   totalQuantity: {
     type: Sequelize.INTEGER,
     allowNull: false,
     validate: {
-      notEmpty: true
+      notEmpty: true,
+      min: 0,
+      max: 25
     }
   }
 });
