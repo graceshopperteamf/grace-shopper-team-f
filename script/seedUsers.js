@@ -1,11 +1,9 @@
-const { User } = require('../server/db/models');
-
 const arrayOfUsers = [
     {
         name: 'Jazmyne Tremblay',
         email: 'Brent.Reichel5@yahoo.com',
-        password: 'james',
-        mailingAddress: '10533 Pouros Club McLaughlinton, ID',
+        password: 'Jazmyne Tremblay',
+        mailingAddress: '10533 Pouros Club McLaughlinton, ID 12345',
         billingAddress: '123 Gingerbread Brooklyn, NY 34343',
         phone: '987-232-7337',
     },
@@ -14,14 +12,13 @@ const arrayOfUsers = [
         email: 'Gus5@gmail.com',
         password: 'Dejuan Kohler',
         mailingAddress: '17322 Gus Fields Averyside, DE 41999',
-        billingAddress:
-            '37856 Valentine Trail North Erikachester, NJ 72501-2960',
+        billingAddress: '37856 Valentine Trail North Erikachester, NJ 72501',
         phone: '133-799-3693',
     },
     {
         name: 'Deshawn Stamm',
         email: 'Deshawn.Stamm37@hotmail.com',
-        password: 'Lorenzo Rempel',
+        password: 'Deshawn Stamm',
         mailingAddress: '1908 Schimmel Causeway Kozeyborough, MI 71079',
         billingAddress: '1908 Schimmel Causeway Kozeyborough, MI 71079',
         phone: '133-799-3693',
@@ -29,9 +26,9 @@ const arrayOfUsers = [
     {
         name: 'Marquise Davis',
         email: 'Giovanna.Nitzsche@gmail.com',
-        password: 'Lorenzo Rempel',
-        mailingAddress: 'oby Burgs West Lenore, VA 03036',
-        billingAddress: '21845 Herminia Locks South Jaimebury, CT 2945',
+        password: 'Marquise Davis',
+        mailingAddress: '1234 Melby Burgs West Lenore, VA 03036',
+        billingAddress: '21845 Herminia Locks South Jaimebury, CT 29425',
         phone: '796-243-4340',
     },
     {
@@ -77,7 +74,7 @@ const arrayOfUsers = [
     {
         name: 'Karen Bayer',
         email: 'Kassandra.Greenholt88@gmail.com',
-        password: 'Damian VonRueden',
+        password: 'Karen Bayer',
         mailingAddress: '3172 Runolfsdottir Isle Ethelfurt, RI 41456',
         billingAddress: '3172 Runolfsdottir Isle Ethelfurt, RI 41456',
         phone: '282-724-2375',
