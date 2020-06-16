@@ -1,6 +1,6 @@
-const Order = require('./order');
-const OrderItem = require('./orderItem');
-const db = require('../db');
+const Order = require('../server/db/models/order');
+const OrderItem = require('../server/db/models/orderItem');
+const db = require('../server/db/db');
 
 const orders = [
   {
