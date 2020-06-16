@@ -1,8 +1,8 @@
-const Sequelize = require("sequelize");
-const db = require("../db");
-const { User } = require(".");
+const Sequelize = require('sequelize');
+const db = require('../db');
+const { User } = require('.');
 
-module.export = db.define("product", {
+module.export = db.define('product', {
     title: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -20,15 +20,15 @@ module.export = db.define("product", {
     image: {
         type: Sequelize.STRING,
         allowNull: false,
-        defaultValue: "default-image.png",
+        defaultValue: 'default-image.png',
     },
     type: {
         type: Sequelize.STRING,
         allowNull: false,
-        defaultValue: "Print",
+        defaultValue: 'Print',
         validate: {
             notEmpty: true,
-            isIn: [["Unique Artwork", "Print - Limited Edition", "Print"]],
+            isIn: [['Unique Artwork', 'Print - Limited Edition', 'Print']],
         },
     },
 });
