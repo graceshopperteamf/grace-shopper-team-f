@@ -20,4 +20,4 @@ const artists = [
     },
 ];
 
-module.export = artists;
+module.exports = artists;

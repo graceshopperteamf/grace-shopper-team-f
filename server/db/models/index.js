@@ -14,7 +14,8 @@ OrderItem.belongsTo(Order);
 OrderItem.hasOne(Product);
 
 User.hasMany(Order);
-User.hasOne(Order, { foreignKey: 'cartId' });
+// User.hasOne(Order, { foreignKey: 'cartId' });
+User.hasOne(Order, { as: 'cart' });
 
 Artist.hasMany(Product);
 Product.belongsTo(Artist);
