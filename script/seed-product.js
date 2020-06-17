@@ -76,7 +76,7 @@ const products = [
     {
         title: 'Empty Seat Series - Untitled III',
         price: 3000,
-        image: 'Untitled III.jpg',
+        image: 'Untitled_III.jpg',
         type: 'Unique Artwork',
     },
     {
@@ -137,7 +137,7 @@ const products = [
     {
         title: "Jeremy O' Harris",
         price: 200,
-        image: 'JeremeyOHarris.png',
+        image: 'JeremyOHarris.png',
         type: 'Print',
     },
     {
@@ -149,7 +149,7 @@ const products = [
     {
         title: 'MARIE/FEMME NOIR NUE COUCHEÉE #2',
         price: 25000,
-        image: 'MARIE/FEMME_NOIR_NUE_COUCHEEE_2_2014.png',
+        image: 'MARIE_FEMME_NOIR_NUE _COUCHEEE_2_2014.png',
         type: 'Unique Artwork',
     },
     {
