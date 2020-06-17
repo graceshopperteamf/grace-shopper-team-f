@@ -7,6 +7,7 @@ const { Order, OrderItem, User, Product, Artist } = require('.');
 // get some dummy data
 const productsSeed = require('../../../script/seed-product');
 const orderSeed = require('../../../script/orders.seed');
+const orderItemsSeed = require('../../../script/orderItem.seed');
 const userSeed = require('../../../script/seedUsers');
 const artistSeed = require('../../../script/seed-artist');
 
@@ -47,10 +48,10 @@ describe('Model Associations', () => {
         let order;
         let orderItems;
         beforeEach(async () => {
-            order = await Order.create(orderSeed.orders[0]);
+            order = await Order.create(orderSeed[0]);
             orderItems = [];
             for (let i = 0; i < 2; i++)
-                orderItems.push((await OrderItem.create(orderSeed.orderItems[i])));
+                orderItems.push((await OrderItem.create(orderItemsSeed[i])));
         });
         const addAndReturn = async () => {
             await order.addOrderItems(orderItems);
@@ -77,8 +78,8 @@ describe('Model Associations', () => {
             user = await User.create(userSeed[0]);
             orders = [];
             for (let i = 0; i < 3; i++)
-                orders.push((await Order.create(orderSeed.orders[0])));
-            cart = await Order.create(orderSeed.orders[0]);
+                orders.push((await Order.create(orderSeed[0])));
+            cart = await Order.create(orderSeed[0]);
         });
         const addAndReturn = async () => {
             await user.addOrders(orders);
