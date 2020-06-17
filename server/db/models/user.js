@@ -23,6 +23,7 @@ const User = db.define('user', {
         type: Sequelize.STRING,
         validate: {
             notEmpty: true,
+            len: [8, 64],
         },
         get() {
             return () => this.getDataValue('password');
@@ -93,4 +94,8 @@ User.beforeCreate(setSaltAndPassword);
 User.beforeUpdate(setSaltAndPassword);
 User.beforeBulkCreate((users) => {
     users.forEach(setSaltAndPassword);
+});
+
+User.afterCreate(async (user) => {
+   await user.createCart({isCart: true, userId: user.id});
 });
