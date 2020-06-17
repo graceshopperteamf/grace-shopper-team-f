@@ -36,6 +36,9 @@ router.post('/', async (req, res, next) => {
         // we create a new order object to represent the user's purchase
         let purchaseOrder = await Order.create();
 
+        // set the purchase order's user
+        await user.addOrder(purchaseOrder);
+
         // then we transfer the created order items that belong to the cart,
         // over to the new purchase order
         // this effectively 'clears' the cart (since now it has no order items)
