@@ -1,17 +1,14 @@
 import React from 'react';
-
 import {Navbar} from './components';
 import Routes from './routes';
-import AllProducts from './components/AllProducts';
-import products from '../script/seed-product';
+import Container from '@material-ui/core/Container';
 
 const App = () => {
   return (
-    <div>
+    <Container>
       <Navbar />
       <Routes />
-      <AllProducts products={products} />
-    </div>
+    </Container>
   );
 };
 
