@@ -6,24 +6,9 @@ const Order = db.define('order', {
     type: Sequelize.BOOLEAN,
     defaultValue: false
   },
-
-  totalPrice: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-    validate: {
-      notEmpty: true,
-      min: 0,
-      max: Infinity
-    }
-  },
-  totalQuantity: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-    validate: {
-      notEmpty: true,
-      min: 0,
-      max: 25
-    }
+  isCart: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
   }
 });
 
