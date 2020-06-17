@@ -1,5 +1,5 @@
-# grace-shopper-team-f
-Team F's Grace-Shopper App!
+# grace-shopper-team-fugees
+Team Fugees' Grace-Shopper App!
 
 ### [Visit The App](https://grace-shopper-team-f.herokuapp.com/)
 
