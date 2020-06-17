@@ -1,13 +1,14 @@
 const router = require('express').Router();
 
+const adminMiddleware = require('./adminMiddleware');
+
 const { Order, OrderItem } = require('../db/models');
 
-// get all the orders for the signed in user (not including their cart)
-router.get('/', async (req, res, next) => {
+// get all the orders (only admisn)
+router.get('/', adminMiddleware, async (req, res, next) => {
     try {
         const orders = await Order.findAll({
             where: {
-                userId: req.user.id,
                 isCart: {
                     [sequelize.Op.not]: true
                 }

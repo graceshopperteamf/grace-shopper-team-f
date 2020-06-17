@@ -12,22 +12,6 @@ router.get('/', async (req, res, next) => {
     catch (e) { next(e); }
 });
 
-router.post('/:artistId', adminMiddleware, async (req, res, next) => {
-    try {
-        let newProduct = await Product.create(req.body);
-
-        // add the new product to the specified artist
-        let artist = await Artist.findByPk(req.params.artistId);
-        await artist.addProduct(newProduct);
-
-        // cant eager load associations on create i guess?
-        // need the associations on the object for filters... so i need to
-        // re-obtain the obejct with the associations list
-        newProduct = await Product.findByPk(newProduct.id, { include: [Artist] });
-        res.status(200).json( newProduct );
-    }
-    catch (e) { next(e); }
-});
 
 router.get('/:productId', async (req, res, next) => {
     try {
