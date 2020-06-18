@@ -6,7 +6,6 @@ import { fetchProductsFromServer } from '../store/product';
 
 class AllProducts extends React.Component {
     componentDidMount() {
-        console.log('component has been mounted');
         this.props.getAllProducts();
     }
 
