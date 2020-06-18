@@ -1,0 +1,37 @@
+import { expect } from 'chai';
+import { fetchProductsFromServer } from './product';
+import axios from 'axios';
+import MockAdapter from 'axios-mock-adapter';
+import configureMockStore from 'redux-mock-store';
+import thunkMiddleware from 'redux-thunk';
+import products from '../../script/seed-product';
+
+const middlewares = [thunkMiddleware];
+const mockStore = configureMockStore(middlewares);
+
+describe('thunk creators', () => {
+    let store;
+    let mockAxios;
+
+    const initialState = { user: {} };
+
+    beforeEach(() => {
+        mockAxios = new MockAdapter(axios);
+        store = mockStore(initialState);
+    });
+
+    afterEach(() => {
+        mockAxios.restore();
+        store.clearActions();
+    });
+
+    describe('fetchProductsFromServer', () => {
+        it('eventually dispatches the GET PRODUCTS action', async () => {
+            mockAxios.onGet('/api/products').replyOnce(200, products);
+            await store.dispatch(fetchProductsFromServer());
+            const actions = store.getActions();
+            expect(actions[0].type).to.be.equal('GET_PRODUCTS');
+            expect(actions[0].products).to.be.deep.equal(products);
+        });
+    });
+});
