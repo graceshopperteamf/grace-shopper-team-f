@@ -6,8 +6,8 @@ const session = require('express-session');
 const passport = require('passport');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const db = require('./db');
-const sessionStore = new SequelizeStore({db});
-const PORT = process.env.PORT || 8080;
+const sessionStore = new SequelizeStore({ db });
+const PORT = process.env.PORT || 1800;
 const app = express();
 const socketio = require('socket.io');
 module.exports = app;
@@ -26,7 +26,8 @@ if (process.env.NODE_ENV === 'test') {
  * keys as environment variables, so that they can still be read by the
  * Node process on process.env
  */
-if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') require('../secrets');
+if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test')
+  require('../secrets');
 
 // passport registration
 passport.serializeUser((user, done) => done(null, user.id));
@@ -46,7 +47,7 @@ const createApp = () => {
 
   // body parsing middleware
   app.use(express.json());
-  app.use(express.urlencoded({extended: true}));
+  app.use(express.urlencoded({ extended: true }));
 
   // compression middleware
   app.use(compression());
@@ -57,7 +58,7 @@ const createApp = () => {
       secret: process.env.SESSION_SECRET || 'my best friend is Cody',
       store: sessionStore,
       resave: false,
-      saveUninitialized: false
+      saveUninitialized: false,
     })
   );
   app.use(passport.initialize());
