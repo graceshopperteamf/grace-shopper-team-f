@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-
 // [] Get all orders for a certain User
 // For Admin only
 /**
@@ -8,10 +7,11 @@ import axios from 'axios';
  */
 export const GET_ORDERS = 'GET_ORDERS';
 
+
 /**
  * ACTION CREATORS
  */
-export const getOrders = (orders) => ({ type: 'GET_ORDERS', orders });
+export const getOrders = (orders) => ({ type: GET_ORDERS, orders });
 
 //
 
@@ -20,7 +20,7 @@ export const getOrders = (orders) => ({ type: 'GET_ORDERS', orders });
  */
 export const fetchOrders = () => async (dispatch) => {
   try {
-    const { data } = await axios.get('/server/api/orders');
+    const { data } = await axios.get('/api/orders');
     dispatch(getOrders(data));
   } catch (error) {
     console.log(error, 'Cool cliques throw bricks but seldom hit targets.');

@@ -4,10 +4,12 @@ import thunkMiddleware from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import userReducer from './user';
 import orderReducer from './redux-order';
+import singleOrderReducer from './redux-single-order';
 
 const reducer = combineReducers({
   user: userReducer,
   order: orderReducer,
+  singleOrder: singleOrderReducer,
 });
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
