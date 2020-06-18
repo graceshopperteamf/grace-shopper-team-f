@@ -97,5 +97,5 @@ User.beforeBulkCreate((users) => {
 });
 
 User.afterCreate(async (user) => {
-   await user.createCart({isCart: true, userId: user.id});
+   await user.createCart({isCart: true});
 });
