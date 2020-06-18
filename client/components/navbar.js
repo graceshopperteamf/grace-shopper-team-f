@@ -1,14 +1,12 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import { logout } from "../store";
-import { AppBar, Toolbar, Typography, Button, IconButton, MenuIcon } from '@material-ui/core/';
-
+import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { logout } from '../store';
 
 const Navbar = ({ handleClick, isLoggedIn }) => (
     <div>
-        <h1 style={{fontSize: "100px" }}>Fugees.</h1>
+        <h1 style={{ fontSize: '100px' }}>Fugees.</h1>
         <nav>
             {isLoggedIn ? (
                 <div>
