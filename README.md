@@ -23,3 +23,10 @@ npm test
 # start the server
 npm run start-dev
 ```
+
+## Authors
+
+* **Andres Gomez** - *Initial work* - [tiredamage42](https://github.com/tiredamage42)
+* **Asim Samuel** - *Initial work* - [lordofdorne](https://github.com/lordofdorne)
+* **Claudia Saimbert** - *Initial work* - [Claudiathefirst](https://github.com/Claudiathefirst)
+* **Kristy Li** - *Initial work* - [ahtae](https://github.com/ahtae)
