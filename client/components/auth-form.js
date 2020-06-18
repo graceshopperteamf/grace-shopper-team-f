@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {auth} from '../store';
+import { Button, TextField} from '@material-ui/core';
 
 /**
  * COMPONENT
@@ -13,20 +14,21 @@ const AuthForm = props => {
     <div>
       <form onSubmit={handleSubmit} name={name}>
         <div>
-          <label htmlFor="email">
+          {/* <label htmlFor="email">
             <small>Email</small>
-          </label>
-          <input name="email" type="text" />
+          </label> */}
+          <TextField label="email" name="email" type="email" />
         </div>
         <div>
-          <label htmlFor="password">
+          {/* <label htmlFor="password">
             <small>Password</small>
-          </label>
-          <input name="password" type="password" />
+          </label> */}
+          <TextField label="password" name="password" type="password" />
         </div>
         <div>
-          <button type="submit">{displayName}</button>
+        <Button variant="contained" color="primary" type="submit">{displayName}</Button>
         </div>
+
         {error && error.response && <div> {error.response.data} </div>}
       </form>
       <a href="/auth/google">{displayName} with Google</a>
