@@ -4,7 +4,7 @@ const adminMiddleware = require('./adminMiddleware');
 
 const { Order, OrderItem } = require('../db/models');
 
-// get all the orders (only admisn)
+// get all the orders (only admins)
 router.get('/', adminMiddleware, async (req, res, next) => {
     try {
         const orders = await Order.findAll({
@@ -27,7 +27,7 @@ router.get('/', adminMiddleware, async (req, res, next) => {
 router.post('/', async (req, res, next) => {
     try {
 
-        // first we get the user we're workiing with (from the database so we get magic methods)
+        // first we get the user we're working with (from the database so we get magic methods)
         let user = await User.findByPk(req.user.id);
 
         // if they're checking out, their cart should have all the order items they are buying

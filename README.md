@@ -1,10 +1,13 @@
 # grace-shopper-team-fugees
+
 Team Fugees' Grace-Shopper App!
 
 ### [Visit The App](https://grace-shopper-team-f.herokuapp.com/)
 
 ## Setup
+
 Fork and Clone:
+
 ```bash
 cd grace-shopper-team-f
 # create a secrets file
