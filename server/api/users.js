@@ -1,8 +1,10 @@
 const router = require('express').Router();
-const {User} = require('../db/models');
+const adminMiddleware = require('./adminMiddleware');
+
+const {User, Order} = require('../db/models');
 module.exports = router;
 
-router.get('/', async (req, res, next) => {
+router.get('/', adminMiddleware, async (req, res, next) => {
   try {
     const users = await User.findAll({
       // explicitly select only the id and email fields - even though
@@ -15,3 +17,24 @@ router.get('/', async (req, res, next) => {
     next(err);
   }
 });
+
+
+router.get('/:userId', adminMiddleware, async (req, res, next) => {
+  try {
+    const user = await User.findByPk(req.params.userId, { attributes: ['id', 'email'] });
+    res.json(user);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// get all the orders for the user
+router.get('/:userId/orders', async (req, res, next) => {
+  try {
+      const user = await User.findByPk(req.params.userId, { include: [Order] });
+      const orders = await user.getOrders();
+      res.status(200).json(orders);
+  }
+  catch (e) { next(e); }
+});
+
