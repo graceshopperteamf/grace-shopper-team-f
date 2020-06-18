@@ -15,27 +15,30 @@ const randomChoice = (choices) => {
 const randomFrom1ToMax = (max) => {
     return Math.floor(Math.random() * max) + 1;
 };
-
-const getAllImagePaths = function(dirPath = 'public', arrayOfFiles = []) {
-    const files = fs.readdirSync(dirPath);
-    files.forEach(function(file) {
-        const fPath = dirPath + '/' + file;
-        if (fs.statSync(fPath).isDirectory())
-            arrayOfFiles = getAllImagePaths(fPath, arrayOfFiles);
-        else if (fPath.endsWith('.jpg') || fPath.endsWith('.png')) {
-                arrayOfFiles.push(fPath.substring(6));
-            }
+/*
+    get all the possible image paths in our public/ directory
+*/
+const getAllImagePaths = function(dir = 'public', paths = []) {
+    fs.readdirSync(dir).forEach((file) => {
+        const path = dir + '/' + file;
+        if (fs.statSync(path).isDirectory()) {
+            // if it's a direcotry, recursively cehck for image files...
+            paths = getAllImagePaths(path, paths);
+        }
+        // check if it'a an image file, if it is, add it to our array
+        else if (path.endsWith('.jpg') || path.endsWith('.png')) {
+            paths.push(path.substring(6));
+        }
     });
-    return arrayOfFiles;
+    return paths;
 };
 
 const allProductImages = getAllImagePaths();
 const allProductTypes = [ 'Print - Limited Edition', 'Print', 'Unique Artwork' ];
 
-
 const createRandomProduct = (title) => {
     return Product.create({
-        title: title,
+        title,
         price: faker.commerce.price(),
         image: randomChoice(allProductImages),
         type: randomChoice(allProductTypes)
@@ -49,10 +52,8 @@ const seedArtistsAndProducts = async (numArtists, numProductsPerArtist) => {
         const artist = await Artist.create({name: artistName});
         artists.push(artist);
         const products = [];
-        for (let j = 0; j < numProductsPerArtist; j++) {
-            const product = await createRandomProduct(`Product ${j + 1} by ${artistName}`);
-            products.push(product);
-        }
+        for (let j = 0; j < numProductsPerArtist; j++)
+            products.push((await createRandomProduct(`Product ${j + 1} by ${artistName}`)));
         await artist.addProducts(products);
     }
     return artists;
@@ -61,8 +62,8 @@ const seedArtistsAndProducts = async (numArtists, numProductsPerArtist) => {
 const seedOrders = async (numUsersWhoOrdered, maxNumOrderItems, users, artists) => {
 
     const getRandomProduct = async () => {
-        const artistProducts = await randomChoice(artists).getProducts();
-        return randomChoice(artistProducts);
+        const randArtist = randomChoice(artists);
+        return randomChoice((await randArtist.getProducts()));
     };
 
     if (numUsersWhoOrdered > users.length)
@@ -87,9 +88,7 @@ const seedOrders = async (numUsersWhoOrdered, maxNumOrderItems, users, artists) 
 
 const createRandomUser = async (name, email, password) => {
     return User.create({
-        name: name,
-        email: email,
-        password: password,
+        name, email, password,
         mailingAddress: `${faker.address.streetAddress()} ${faker.address.city()}, ${faker.address.state()} ${faker.address.zipCode()}`,
         billingAddress: `${faker.address.streetAddress()} ${faker.address.city()}, ${faker.address.state()} ${faker.address.zipCode()}`,
         phone: faker.phone.phoneNumber(),
@@ -98,25 +97,21 @@ const createRandomUser = async (name, email, password) => {
 
 const seedUsers = async (num) => {
     let users = [];
-    for (let i = 0; i < num; i++) {
-        users.push((await createRandomUser(`User ${i + 1}`, `User${i + 1}@site.com`, `password${i + 1}`)));
-    }
+    for (let i = 1; i <= num; i++)
+        users.push((await createRandomUser(`User ${i}`, `User${i}@site.com`, `password${i}`)));
     return users;
 };
 
-
 const seed = async (numArtists = 2, numProductsPerArtist = 2, numUsers = 3, numUsersWhoOrdered = 2, maxNumOrderItems = 5) => {
     try {
-
         await db.sync({ force: true });
         console.log('db synced!');
-
         const artists = await seedArtistsAndProducts(numArtists, numProductsPerArtist);
         const users = await seedUsers(numUsers);
         const orders = await seedOrders(numUsersWhoOrdered, maxNumOrderItems, users, artists);
-
         console.log(`seeded successfully`);
-    } catch (err) {
+    }
+    catch (err) {
         console.log(err);
     }
 };
@@ -125,10 +120,12 @@ async function runSeed() {
     console.log('seeding...');
     try {
         await seed();
-    } catch (err) {
+    }
+    catch (err) {
         console.error(err);
         process.exitCode = 1;
-    } finally {
+    }
+    finally {
         console.log('closing db connection');
         await db.close();
         console.log('db connection closed');
