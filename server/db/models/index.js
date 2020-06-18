@@ -10,8 +10,7 @@ const OrderItem = require('./orderItem');
 //Associations
 
 Order.hasMany(OrderItem);
-OrderItem.belongsTo(Order);
-OrderItem.hasOne(Product);
+OrderItem.belongsTo(Product);
 
 User.hasMany(Order);
 User.hasOne(Order, { as: 'cart' });

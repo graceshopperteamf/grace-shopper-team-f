@@ -1,15 +1,11 @@
 /* global describe beforeEach it */
 
 const {expect} = require('chai');
-const db = require('../index');
-const { Order, OrderItem, User, Product, Artist } = require('.');
+const { db, Order, OrderItem, User, Product, Artist } = require('.');
 
 // get some dummy data
-const productsSeed = require('../../../script/seed-product');
-const orderSeed = require('../../../script/orders.seed');
-const orderItemsSeed = require('../../../script/orderItem.seed');
-const userSeed = require('../../../script/seedUsers');
-const artistSeed = require('../../../script/seed-artist');
+const { seed, createRandomProduct, createRandomUser } = require('../../../script/seed');
+
 
 describe('Model Associations', () => {
     beforeEach(() => {
@@ -21,10 +17,10 @@ describe('Model Associations', () => {
         let products;
 
         beforeEach(async () => {
-            artist = await Artist.create(artistSeed[0]);
+            artist = await Artist.create({name: 'Test Artist'});
             products = [];
             for (let i = 0; i < 2; i++)
-                products.push((await Product.create(productsSeed[i])));
+                products.push((await createRandomProduct(`prod ${i}`)));
         });
         const addAndReturn = async () => {
             await artist.addProducts(products);
@@ -48,10 +44,10 @@ describe('Model Associations', () => {
         let order;
         let orderItems;
         beforeEach(async () => {
-            order = await Order.create(orderSeed[0]);
+            order = await Order.create();
             orderItems = [];
             for (let i = 0; i < 2; i++)
-                orderItems.push((await OrderItem.create(orderItemsSeed[i])));
+                orderItems.push((await OrderItem.create()));
         });
         const addAndReturn = async () => {
             await order.addOrderItems(orderItems);
@@ -73,13 +69,13 @@ describe('Model Associations', () => {
     });
 
     describe('User Associations', () => {
-        let user, orders, cart;
+        let user, orders;
         beforeEach(async () => {
-            user = await User.create(userSeed[0]);
+
+            user = await createRandomUser(`User`, `User@site.com`, `password`);
             orders = [];
             for (let i = 0; i < 3; i++)
-                orders.push((await Order.create(orderSeed[0])));
-            cart = await Order.create(orderSeed[0]);
+                orders.push((await Order.create()));
         });
         const addAndReturn = async () => {
             await user.addOrders(orders);
@@ -97,14 +93,9 @@ describe('Model Associations', () => {
             const userorders = await addAndReturn();
             expect(userorders[0].userId).to.be.equal(user.id);
         });
-        it('expects user cart to start as null', async () => {
+        it('expects user cart to exist', async () => {
             const c = await user.getCart();
-            expect(c).to.be.equal(null);
-        });
-        it('expects user cart to be the order it was initialized to', async () => {
-            await user.setCart(cart);
-            const c = await user.getCart();
-            expect(c.id).to.be.equal(cart.id);
+            expect(c).to.not.be.equal(null);
         });
     });
 }); // end describe('User model')
