@@ -14,7 +14,6 @@ router.get('/', adminMiddleware, async (req, res, next) => {
     }
 });
 
-
 router.get('/:userId', adminMiddleware, async (req, res, next) => {
     try {
         const user = await User.findByPk(req.params.userId, { attributes: ['id', 'email'] });
@@ -36,8 +35,7 @@ router.get('/:userId/orders', async (req, res, next) => {
                 }
             }
         });
-        const orders = user.orders;
-        res.status(200).json(orders);
+        res.status(200).json(user.orders);
     }
     catch (e) { next(e); }
 });

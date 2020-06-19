@@ -4,7 +4,7 @@
 const fs = require('fs');
 const faker = require('faker');
 
-const { db, productTypes, User, Artist, Product, Order, OrderItem } = require('../server/db/models');
+const { db, productTypes, User, Artist, Product, Order } = require('../server/db/models');
 
 /*
     helper functions
@@ -87,26 +87,18 @@ const seedOrders = async (numUsersWhoOrdered, maxNumOrderItems, users, artists) 
     if (numUsersWhoOrdered > users.length)
         numUsersWhoOrdered = users.length;
 
-    // const orders = [];
     for (let i = 0; i < numUsersWhoOrdered; i++) {
 
         let order = await Order.create({ userId: users[i].id });
 
-        // const orderItems = [];
         const numItems = randomFrom1ToMax(maxNumOrderItems);
         for (let j = 0; j < numItems; j++) {
             await order.createOrderItem({
                 quantity: randomFrom1ToMax(5),
                 productId: (await getRandomProduct()).id
             });
-            // const orderItem = await OrderItem.create({ quantity: randomFrom1ToMax(5) });
-            // await orderItem.setProduct((await getRandomProduct()));
-            // orderItems.push(orderItem);
         }
-        // await order.addOrderItems(orderItems);
-        // orders.push(order);
     }
-    // return orders;
 };
 
 /*
@@ -163,6 +155,7 @@ if (module === require.main) {
     runSeed();
 }
 
+// export helper functions for tests
 module.exports = {
     seed,
     createRandomProductTemplate, createRandomProduct, createRandomProducts,
