@@ -93,9 +93,5 @@ describe('Model Associations', () => {
             const userorders = await addAndReturn();
             expect(userorders[0].userId).to.be.equal(user.id);
         });
-        it('expects user cart to exist', async () => {
-            const c = await user.getCart();
-            expect(c).to.not.be.equal(null);
-        });
     });
 }); // end describe('User model')
