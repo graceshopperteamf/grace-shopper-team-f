@@ -7,7 +7,6 @@ const OrderItem = db.define('orderItem', {
         defaultValue: 1,
         validate: {
             min: 0,
-            max: Infinity
         }
     }
 });
