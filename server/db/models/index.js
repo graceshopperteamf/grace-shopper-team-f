@@ -13,7 +13,6 @@ Order.hasMany(OrderItem);
 OrderItem.belongsTo(Product);
 
 User.hasMany(Order);
-User.hasOne(Order, { as: 'cart' });
 
 Artist.hasMany(Product);
 Product.belongsTo(Artist);
