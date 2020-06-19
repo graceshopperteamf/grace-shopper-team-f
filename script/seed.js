@@ -18,7 +18,7 @@ const randomFrom1ToMax = (max) => {
 /*
     get all the possible image paths in our public/ directory
 */
-const getAllImagePaths = function(dir = 'public', paths = []) {
+const getAllImagePaths = function (dir = 'public', paths = []) {
     fs.readdirSync(dir).forEach((file) => {
         const path = dir + '/' + file;
         if (fs.statSync(path).isDirectory()) {
@@ -34,7 +34,7 @@ const getAllImagePaths = function(dir = 'public', paths = []) {
 };
 
 const allProductImages = getAllImagePaths();
-const allProductTypes = [ 'Print - Limited Edition', 'Print', 'Unique Artwork' ];
+const allProductTypes = ['Print - Limited Edition', 'Print', 'Unique Artwork'];
 
 const createRandomProduct = (title) => {
     return Product.create({
@@ -49,7 +49,7 @@ const seedArtistsAndProducts = async (numArtists, numProductsPerArtist) => {
     let artists = [];
     for (let i = 0; i < numArtists; i++) {
         const artistName = `Artist ${i + 1}`;
-        const artist = await Artist.create({name: artistName});
+        const artist = await Artist.create({ name: artistName });
         artists.push(artist);
         const products = [];
         for (let j = 0; j < numProductsPerArtist; j++)
