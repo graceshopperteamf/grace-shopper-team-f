@@ -1,6 +1,8 @@
 const Sequelize = require('sequelize');
 const db = require('../db');
 
+const productTypes = ['Unique Artwork', 'Print - Limited Edition', 'Print'];
+
 const Product = db.define('product', {
     title: {
         type: Sequelize.STRING,
@@ -26,9 +28,9 @@ const Product = db.define('product', {
         defaultValue: 'Print',
         validate: {
             notEmpty: true,
-            isIn: [['Unique Artwork', 'Print - Limited Edition', 'Print']],
+            isIn: [productTypes],
         },
     },
 });
 
-module.exports = Product;
+module.exports = { Product, productTypes };
