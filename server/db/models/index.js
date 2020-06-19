@@ -1,7 +1,7 @@
 const db = require('../db');
 const User = require('./user');
 
-const Product = require('./product');
+const { Product, productTypes } = require('./product');
 const Artist = require('./artist');
 
 const Order = require('./order');
@@ -20,9 +20,10 @@ Product.belongsTo(Artist);
 
 module.exports = {
   db,
-  User,
+  productTypes,
   Product,
   Artist,
+  User,
   Order,
   OrderItem,
 };
