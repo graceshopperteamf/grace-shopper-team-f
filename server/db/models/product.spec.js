@@ -36,7 +36,6 @@ describe('Product Model', () => {
     };
 
     it('title cannot be null', validationTestNull('title'));
-    it('type cannot be null', validationTestNull('type'));
     it('price cannot be null', validationTestNull('price'));
 
     it('price cannot be less than 0', async () => {
