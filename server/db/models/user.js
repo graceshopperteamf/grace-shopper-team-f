@@ -95,7 +95,3 @@ User.beforeUpdate(setSaltAndPassword);
 User.beforeBulkCreate((users) => {
     users.forEach(setSaltAndPassword);
 });
-
-User.afterCreate(async (user) => {
-   await user.createCart({isCart: true});
-});
