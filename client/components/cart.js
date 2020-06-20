@@ -1,5 +1,5 @@
 import React from 'react';
-import ShoppingBasketOutlinedIcon from '@material-ui/icons/ShoppingBasketOutlined';
+// import ShoppingBasketOutlinedIcon from '@material-ui/icons/ShoppingBasketOutlined';
 import SingleProduct from './SingleProduct';
 import { fetchProductsFromServer } from '../store/product';
 import { connect } from 'react-redux';
@@ -34,29 +34,28 @@ class Cart extends React.Component {
     let Products = this.props.products.length ? (
       this.props.products.map((product) => {
         return (
-          <SingleProduct key={product.id}>
-            <li>
-              <div>
-                <image src={product.image} width={300} alt={product.title} />
-                <p>
-                  {/* artist ? */}
-                  Title: {product.title}
-                  Price: ${product.price.toLocaleString('en-US')}
-                  Type: {product.type}
-                  Quantity:
-                </p>
-                <div>{/* <Link onClicks for add and remove quantity/> */}</div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    this.handleRemove(product.id);
-                  }}
-                >
-                  Remove
-                </button>
-              </div>
-            </li>
-          </SingleProduct>
+            <div>
+                <li>
+                    <div>
+                        <img src={product.image} width={300} alt={product.title} />
+                        <p>
+                        artist ?
+                        Title: {product.title}
+                        Price: ${product.price.toLocaleString('en-US')}
+                        Type: {product.type}
+                        Quantity:
+                        </p>
+                        <button
+                        type="button"
+                        onClick={() => {
+                            this.handleRemove(product.id);
+                        }}
+                        >
+                        Remove
+                        </button>
+                    </div>
+                </li>
+            </div>
         );
       })
     ) : (
@@ -84,4 +83,5 @@ const mapDispatch = (dispatch) => {
     getAllProducts: () => dispatch(fetchProductsFromServer()),
   };
 };
+
 export default connect(mapProducts, mapDispatch)(Cart);
