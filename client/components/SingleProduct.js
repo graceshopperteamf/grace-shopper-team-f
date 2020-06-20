@@ -1,17 +1,15 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
-const SingleProduct = (product) => {
-    console.log(product);
+const SingleProduct = (props) => {
     return (
         <div>
-            <p>{product.title.toUpperCase()}</p>
+            <p>{props.product.title.toUpperCase()}</p>
             <img
-                src={`${product.image}`}
+                src={`${props.product.image}`}
                 width={500}
-                alt={product.title}
+                alt={props.product.title}
             />
-            <p>${product.price.toLocaleString('en-US')}</p>
+            <p>{props.product.price.toLocaleString('en-US')}</p>
         </div>
     );
 };
