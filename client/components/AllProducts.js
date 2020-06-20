@@ -22,7 +22,7 @@ class AllProducts extends React.Component {
                 >
                     {this.props.products.map((product) => (
                         <Link to={`/products/${product.id}`} key={product.title}>
-                            <SingleProduct key={product.title} product={product} />
+                            <SingleProduct product={product} />
                         </Link>
                     ))}
                 </Grid>
