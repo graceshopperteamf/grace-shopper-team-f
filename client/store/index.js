@@ -5,16 +5,19 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import userReducer from './user';
 import orderReducer from './redux-order';
 import singleOrderReducer from './redux-single-order';
+import singleProduct from './singleProduct';
 import products from './product';
 
 const reducer = combineReducers({
-  products,
-  user: userReducer,
-  order: orderReducer,
-  singleOrder: singleOrderReducer,
+    products,
+    product: singleProduct,
+    user: userReducer,
+    order: orderReducer,
+    singleOrder: singleOrderReducer,
 });
+
 const middleware = composeWithDevTools(
-  applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
+    applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
 );
 const store = createStore(reducer, middleware);
 
