@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const SingleProduct = ({product}) => {
+const SingleProduct = (product) => {
+    console.log(product);
     return (
         <div>
             <p>{product.title.toUpperCase()}</p>
