@@ -1,3 +1,27 @@
+export const loadState = () => {
+    try {
+        const serializedState = localStorage.getItem('cart');
+
+        if (serializedState === null) {
+            return undefined;
+        }
+
+        return JSON.parse(serializedState);
+    } catch (err) {
+        return undefined;
+    }
+};
+
+export const saveState = (cart) => {
+    try {
+        const serializedState = JSON.stringify(cart);
+
+        localStorage.setItem('cart', serializedState);
+    } catch (err) {
+        console.log(err);
+    }
+};
+
 const ADD_ITEM = 'ADD_ITEM';
 
 const REMOVE_ITEM = 'REMOVE_ITEM';
@@ -6,7 +30,7 @@ const UPDATE_ITEM = 'UPDATE_ITEM';
 
 const CLEAR_CART = 'CLEAR_CART';
 
-const defaultCart = [];
+const defaultCart = [...loadState()] || [];
 
 export const addToCart = (id, inventoryQuantity) => ({
     type: ADD_ITEM,
@@ -37,6 +61,7 @@ export default function cartReducer(state = defaultCart, action) {
                     itemAlreadyExists = true;
 
                     if (action.inventoryQuantity === updatedCart[i].quantity) {
+                        saveState(state);
                         return state;
                     }
 
@@ -47,11 +72,15 @@ export default function cartReducer(state = defaultCart, action) {
                 }
             }
 
-            return itemAlreadyExists
-                ? updatedCart
-                : [...state, { id: action.id, quantity: 1 }];
+            if (itemAlreadyExists) {
+                return updatedCart;
+            } else {
+                saveState([...state, { id: action.id, quantity: 1 }]);
+                return [...state, { id: action.id, quantity: 1 }];
+            }
         case REMOVE_ITEM: {
             if (state.length === 0) {
+                saveState(state);
                 return state;
             }
 
@@ -69,6 +98,7 @@ export default function cartReducer(state = defaultCart, action) {
             }
 
             if (!itemToRemove) {
+                saveState(state);
                 return state;
             }
 
@@ -78,9 +108,14 @@ export default function cartReducer(state = defaultCart, action) {
                 quantity: itemToRemove.quantity - 1,
             };
 
-            return updatedState[idOfItemToRemove].quantity === 0
-                ? updatedState.filter((item) => item.id !== action.id)
-                : updatedState;
+            if (updatedState[idOfItemToRemove].quantity === 0) {
+                saveState(updatedState);
+
+                return updatedState.filter((item) => item.id !== action.id)
+            } else {
+                saveState(updatedState);
+                return updatedState;
+            }
         }
         case UPDATE_ITEM: {
             if (action.quantity === 0) {
@@ -104,36 +139,15 @@ export default function cartReducer(state = defaultCart, action) {
                     quantity: action.quantity,
                 };
 
+                saveState(updatedState);
                 return updatedState;
             }
         }
         case CLEAR_CART:
+            saveState([]);
             return [];
         default:
+            saveState(state);
             return state;
     }
 }
-
-export const loadState = () => {
-    try {
-        const serializedState = localStorage.getItem('state');
-
-        if (serializedState === null) {
-            return undefined;
-        }
-
-        return JSON.parse(serializedState);
-    } catch (err) {
-        return undefined;
-    }
-};
-
-export const saveState = (state) => {
-    try {
-        const serializedState = JSON.stringify(state);
-
-        localStorage.setItem('state', serializedState);
-    } catch (err) {
-        console.log(err);
-    }
-};
