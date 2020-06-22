@@ -3,14 +3,14 @@ const request = require('supertest');
 const app = require('../index');
 const { db, Order } = require('../db/models');
 
-const { createRandomProducts } = require('../../script/seed');
+const { createRandomProducts, createRandomOrder } = require('../../script/seed');
 const { testForAdminOnlyGet } = require('./adminTestingUtils');
 const OrderItem = require('../db/models/orderItem');
 
 describe('Order Routes', () => {
     beforeEach(async () => {
         await db.sync({ force: true });
-        await Order.create();
+        await createRandomOrder();
     });
 
 

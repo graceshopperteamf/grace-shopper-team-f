@@ -4,7 +4,7 @@ const { expect } = require('chai');
 const request = require('supertest');
 const app = require('../index');
 const { db, Order } = require('../db/models');
-const { createRandomUsers } = require('../../script/seed');
+const { createRandomUsers, createRandomOrderTemplate } = require('../../script/seed');
 
 const { testForAdminOnlyGet } = require('./adminTestingUtils');
 
@@ -34,7 +34,7 @@ describe('User routes', () => {
     describe('/api/users/', () => {
 
         it('GET /:userId/orders gets all of a users orders', async () => {
-            const orders = await Order.bulkCreate( (new Array(3)).fill(0).map(e => { return { userId: users[e].id }; } ) );
+            const orders = await Order.bulkCreate( (new Array(3)).fill(0).map(() => { return { userId: users[0].id, ...createRandomOrderTemplate() }; } ) );
 
             let res = await request(app).get(`/api/users/${users[0].id}/orders`).expect(200);
             expect(res.body).to.be.an('array');
