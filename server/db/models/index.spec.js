@@ -4,7 +4,7 @@ const {expect} = require('chai');
 const { db, Order, OrderItem, Artist } = require('.');
 
 // get some dummy data
-const { createRandomProducts, createRandomUser } = require('../../../script/seed');
+const { createRandomProduct, createRandomProducts, createRandomUser } = require('../../../script/seed');
 
 
 describe('Model Associations', () => {
@@ -44,9 +44,11 @@ describe('Model Associations', () => {
         let orderItems;
         beforeEach(async () => {
             order = await Order.create();
-            orderItems = [];
-            for (let i = 0; i < 2; i++)
-                orderItems.push((await OrderItem.create()));
+            const product = await createRandomProduct('prod');
+            orderItems = await OrderItem.bulkCreate([
+                { productId: product.id },
+                { productId: product.id }
+            ]);
         });
         const addAndReturn = async () => {
             await order.addOrderItems(orderItems);
@@ -70,11 +72,8 @@ describe('Model Associations', () => {
     describe('User Associations', () => {
         let user, orders;
         beforeEach(async () => {
-
             user = await createRandomUser(`User`, `User@site.com`, `password`);
-            orders = [];
-            for (let i = 0; i < 3; i++)
-                orders.push((await Order.create()));
+            orders = await Order.bulkCreate([{}, {}, {}]);
         });
         const addAndReturn = async () => {
             await user.addOrders(orders);
