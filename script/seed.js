@@ -41,7 +41,8 @@ const createRandomProduct = (title) => {
         title,
         price: faker.commerce.price(),
         image: randomChoice(allProductImages),
-        type: randomChoice(allProductTypes)
+        type: randomChoice(allProductTypes),
+        inventoryQuantity: Math.floor(Math.random() * 5)
     });
 };
 
