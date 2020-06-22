@@ -20,10 +20,11 @@ class AllProducts extends React.Component {
                     alignItems="stretch"
                     spacing={2}
                 >
-                    {this.props.products.map((product) => (
-                        <Link to={`/products/${product.id}`} key={product.title}>
+                    {this.props.products.filter(product => product.inventoryQuantity !== 0).map((product) => (
+                        <div key={product.id}>
+                            <Link to={`/products/${product.id}`}>{product.title}</Link>
                             <SingleProduct product={product} />
-                        </Link>
+                        </div>
                     ))}
                 </Grid>
             </div>
