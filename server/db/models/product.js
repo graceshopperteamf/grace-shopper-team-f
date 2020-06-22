@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const db = require('../db');
 
 const productTypes = ['Unique Artwork', 'Print - Limited Edition', 'Print'];
-const productKeys = [ 'title', 'price', 'image', 'type', 'description' ];
+const productKeys = [ 'title', 'price', 'image', 'type', 'description', 'inventoryQuantity' ];
 
 const Product = db.define('product', {
     title: {
