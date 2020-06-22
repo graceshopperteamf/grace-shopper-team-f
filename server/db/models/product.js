@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 const db = require('../db');
 
 const productTypes = ['Unique Artwork', 'Print - Limited Edition', 'Print'];
+const productKeys = [ 'title', 'price', 'image', 'type', 'description' ];
 
 const Product = db.define('product', {
     title: {
@@ -31,6 +32,9 @@ const Product = db.define('product', {
             isIn: [productTypes],
         },
     },
+    description: {
+        type: Sequelize.STRING
+    }
 });
 
-module.exports = { Product, productTypes };
+module.exports = { Product, productTypes, productKeys };

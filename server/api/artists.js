@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 const adminMiddleware = require('./adminMiddleware');
 
-const { Artist, Product } = require('../db/models');
+const { Artist, Product, productKeys } = require('../db/models');
 
 router.get('/', async (req, res, next) => {
     try {
@@ -47,16 +47,10 @@ router.post('/:artistId/products', adminMiddleware, async (req, res, next) => {
     try {
 
         // build the product template with keys from the req.body if they're supplied
-        const titleKey = 'title';
-        const priceKey = 'price';
-        const imageKey = 'image';
-        const typeKey = 'type';
-
         const prod = {};
-        if (titleKey in req.body) prod[titleKey] = req.body[titleKey];
-        if (priceKey in req.body) prod[priceKey] = req.body[priceKey];
-        if (imageKey in req.body) prod[imageKey] = req.body[imageKey];
-        if (typeKey in req.body) prod[typeKey] = req.body[typeKey];
+        productKeys.forEach(k => {
+            if (k in req.body) prod[k] = req.body[k];
+        });
 
         // add the new product to the specified artist
         let artist = await Artist.findByPk(req.params.artistId);
