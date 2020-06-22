@@ -8,10 +8,7 @@ const codyTemplate = () => {
     return {
         name: 'Cody Tremblay',
         email: 'Brent.Reichel5@yahoo.com',
-        password: 'bones are yummy',
-        mailingAddress: '10533 Pouros Club McLaughlinton, ID 12345',
-        billingAddress: '123 Gingerbread Brooklyn, NY 34343',
-        phone: '987-232-7337',
+        password: 'bones are yummy'
     };
 };
 
@@ -34,16 +31,13 @@ describe('User model', () => {
     });
 
     describe('column definitions', () => {
-        it('has a `name`, `email`, `password`, `mailingAddress`, `billingAddress`, `isAdmin`, and `phone`', async () => {
+        it('has a `name`, `email`, `password`, `isAdmin`', async () => {
             const cody = await User.create(codyTemplate());
 
             expect(cody.name).to.equal('Cody Tremblay');
             expect(cody.email).to.equal('Brent.Reichel5@yahoo.com');
             expect(cody.correctPassword('bones are yummy')).to.be.equal(true);
-            expect(cody.mailingAddress).to.equal('10533 Pouros Club McLaughlinton, ID 12345');
-            expect(cody.billingAddress).to.equal('123 Gingerbread Brooklyn, NY 34343');
             expect(cody.isAdmin).to.equal(false);
-            expect(cody.phone).to.equal('987-232-7337');
         });
     });
 
@@ -67,9 +61,6 @@ describe('User model', () => {
             };
         };
         it('`name` is required', validationTestNull('name'));
-        it('`mailing address` is required', validationTestNull('mailingAddress'));
-        it('`billing address` is required', validationTestNull('billingAddress'));
-        it('`phone` is required', validationTestNull('phone'));
 
         const validationTestEmpty = (testColumn) => {
             return async () => {
@@ -86,9 +77,6 @@ describe('User model', () => {
         };
         it('requires `name` to not be an empty string', validationTestEmpty('name'));
         it('requires `email` to not be an empty string', validationTestEmpty('email'));
-        it('requires `mailingAddress` to not be an empty string', validationTestEmpty('mailingAddress'));
-        it('requires `billingAddress` to not be an empty string', validationTestEmpty('billingAddress'));
-        it('requires `phone` to not be an empty string', validationTestEmpty('phone'));
 
         it('`isAdmin` has a default value of false', async () => {
             const createdUser = await User.build({ user });
