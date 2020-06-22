@@ -22,17 +22,23 @@ describe('Product Model', () => {
         expect(newProduct.type).to.equal('Print - Limited Edition');
         expect(newProduct.inventoryQuantity).to.equal(10);
     });
-    it('title cannot be null', async () => {
-        const blankProduct = Product.build();
-        try {
-            await blankProduct.validate();
-            throw Error(
-                'WOMP WOMP, validation should have failed without title'
-            );
-        } catch (err) {
-            expect(err.message).to.contain('title cannot be null');
-        }
-    });
+
+    const validationTestNull = (testColumn) => {
+        return async () => {
+            delete product[testColumn];
+            const withoutColumn = await Product.build(product);
+            try {
+                await withoutColumn.validate();
+                throw new Error(`validation was successful but should have failed without '${testColumn}'`);
+            }
+            catch (err) {
+                expect(err.message).to.contain(`${testColumn} cannot be null`);
+            }
+        };
+    };
+
+    it('title cannot be null', validationTestNull('title'));
+    it('price cannot be null', validationTestNull('price'));
 
     it('inventoryQuantity cannot be null', async () => {
         delete product.inventoryQuantity;
@@ -52,13 +58,11 @@ describe('Product Model', () => {
         product.price = -300;
         try {
             const negativePrice = await Product.create(product);
-            if (negativePrice) {
+            if (negativePrice)
                 throw Error('Umm...No, Price cannot be less than 0');
-            }
-        } catch (err) {
-            expect(err.message).to.not.have.string(
-                'WOMP WOMP, validation should have failed'
-            );
+        }
+        catch (err) {
+            expect(err.message).to.not.have.string('Umm...No, Price cannot be less than 0');
         }
     });
 
@@ -66,14 +70,21 @@ describe('Product Model', () => {
         product.type = 'Painting';
         try {
             const wrongType = await Product.create(product);
-            if (wrongType) {
+            if (wrongType)
                 throw Error('DANG!!!Invalid Type');
-            }
-        } catch (err) {
-            expect(err.message).to.not.have.string('Sorry Homie');
         }
+        catch (err) {
+            expect(err.message).to.not.have.string('DANG!!!Invalid Type');
+        }
+
         delete product.type;
         const defaultType = await Product.create(product);
         expect(defaultType.type).to.equal('Print');
+    });
+
+    it('has a default image if none specified', async () => {
+        delete product.image;
+        const defaultType = await Product.create(product);
+        expect(defaultType.image).to.equal('default-image.png');
     });
 });

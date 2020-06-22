@@ -3,81 +3,47 @@
 const { expect } = require('chai');
 const request = require('supertest');
 const app = require('../index');
-const { db, User, Order, OrderItem } = require('../db/models');
-const { createRandomUser } = require('../../script/seed');
+const { db, Order } = require('../db/models');
+const { createRandomUsers, createRandomOrderTemplate } = require('../../script/seed');
 
-const userSeeds = require('../../script/seedUsers');
+const { testForAdminOnlyGet } = require('./adminTestingUtils');
 
 describe('User routes', () => {
-    beforeEach(() => {
-        return db.sync({ force: true });
+    let users;
+    beforeEach(async () => {
+        await db.sync({ force: true });
+        users = await createRandomUsers(5);
     });
 
     describe('ADMIN /api/users/', () => {
-        let createdUsers;
-        beforeEach(async () => {
-            createdUsers = [];
-            for (let i = 0; i < userSeeds.length; i++) {
-                createdUsers.push((await User.create(userSeeds[i])));
-            }
-        });
 
         it('GET lets an admin see all the users', async () => {
             const res = await request(app).get('/api/users').expect(200);
             expect(res.body).to.be.an('array');
-            expect(res.body[0].email).to.be.equal(userSeeds[0].email);
-            expect(res.body.length).to.be.equal(userSeeds.length);
+            expect(res.body.length).to.be.equal(users.length);
         });
-        it('GET lets ONLY an admin see all the users', async () => {
-            process.env.NODE_ENV = 'development';
-            const res = await request(app).get('/api/users').expect(401);
-            process.env.NODE_ENV = 'test';
-        });
-
-
         it('GET /:userId lets an admin see a specific user', async () => {
-            const res = await request(app).get(`/api/users/${createdUsers[0].id}`).expect(200);
-            expect(res.body.email).to.be.equal(createdUsers[0].email);
-        });
-        it('GET /:userId lets ONLY an admin see a specific user', async () => {
-            process.env.NODE_ENV = 'development';
-            const res = await request(app).get(`/api/users/${createdUsers[0].id}`).expect(401);
-            process.env.NODE_ENV = 'test';
+            const res = await request(app).get(`/api/users/${users[0].id}`).expect(200);
+            expect(res.body.email).to.be.equal(users[0].email);
         });
 
-
+        it('GET lets ONLY an admin see all the users', testForAdminOnlyGet('/api/users'));
+        it('GET /:userId lets ONLY an admin see a specific user', testForAdminOnlyGet(`/api/users/1`));
     });
 
-
     describe('/api/users/', () => {
-        let createdUsers;
-        let createdOrders;
-        beforeEach(async () => {
-            createdUsers = [];
-            for (let i = 0; i < userSeeds.length; i++) {
-                createdUsers.push((await User.create(userSeeds[i])));
-            }
-
-            createdOrders = [];
-            for (let i = 0; i < 3; i++) {
-                const o = await Order.create();
-                createdOrders.push(o);
-                createdUsers[0].addOrder(o);
-            }
-        });
 
         it('GET /:userId/orders gets all of a users orders', async () => {
+            const orders = await Order.bulkCreate( (new Array(3)).fill(0).map(() => { return { userId: users[0].id, ...createRandomOrderTemplate() }; } ) );
 
-            let res = await request(app).get(`/api/users/${createdUsers[0].id}/orders`).expect(200);
+            let res = await request(app).get(`/api/users/${users[0].id}/orders`).expect(200);
             expect(res.body).to.be.an('array');
-            expect(res.body[0].id).to.be.equal(createdOrders[0].id);
-            expect(res.body.length).to.be.equal(createdOrders.length);
+            expect(res.body[0].id).to.be.equal(orders[0].id);
+            expect(res.body.length).to.be.equal(orders.length);
 
-            res = await request(app).get(`/api/users/${createdUsers[1].id}/orders`).expect(200);
+            res = await request(app).get(`/api/users/${users[1].id}/orders`).expect(200);
             expect(res.body).to.be.an('array');
             expect(res.body).to.deep.equal([]);
         });
     });
-
-
 });
