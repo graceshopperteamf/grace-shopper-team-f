@@ -44,7 +44,8 @@ const createRandomProductTemplate = (title) => {
         title,
         price: randomFrom1ToMax(100 * maxPrice),
         image: randomChoice(allProductImages),
-        type: randomChoice(productTypes)
+        type: randomChoice(productTypes),
+        inventoryQuantity: Math.floor(Math.random() * 5)
     };
 };
 const createRandomProduct = (title) => {
