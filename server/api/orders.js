@@ -16,7 +16,16 @@ router.get('/', adminMiddleware, async (req, res, next) => {
 /*
     order is posted anytime a user checks out.
 
-    req.body should be an array of objects where each object is:
+
+    req.body:
+    {
+        billingAddress: '...',
+        mailingAddress: '...',
+        phone: '...'
+        orderItems: [ ... ]
+    }
+
+    req.body.orderItems should be an array of objects where each object is:
 
     {
         quantity: 3,
@@ -28,20 +37,23 @@ router.post('/', async (req, res, next) => {
     try {
         const quantityKey = 'quantity';
         const productKey = 'productId';
+        const orderItemsKey = 'orderItems';
 
         // validate our request body
+        const orderItems = req.body[orderItemsKey];
+
         // is it an array?
-        if (!Array.isArray(req.body))
-            throw new Error(`POST api/orders: request body should be an array, got type: ${typeof req.body}`);
+        if (!Array.isArray(orderItems))
+            throw new Error(`POST api/orders: request body should contain an array or order items at key: ${orderItemsKey}`);
 
         // is it empty?
-        if (req.body.length <= 0)
+        if (orderItems.length <= 0)
             throw new Error(`POST api/orders: cannot post an empty order array`);
 
         // does each element have the appropriate keys?
-        for (let i = 0; i < req.body.length; i++) {
+        for (let i = 0; i < orderItems.length; i++) {
             const checkKey = (k) => {
-                if (!(k in req.body[i]))
+                if (!(k in orderItems[i]))
                     throw new Error(`POST api/orders: order item at index ${i} missing key: '${k}'`);
             };
             checkKey(quantityKey);
@@ -53,13 +65,18 @@ router.post('/', async (req, res, next) => {
             userId = req.user.id;
 
         // create an order that belongs to the user
-        let purchaseOrder = await Order.create({ userId });
+        let purchaseOrder = await Order.create({
+            userId,
+            billingAddress: req.body.billingAddress,
+            mailingAddress: req.body.mailingAddress,
+            phone: req.body.phone
+        });
 
         // create the order items and add
-        for (let i = 0; i < req.body.length; i++) {
+        for (let i = 0; i < orderItems.length; i++) {
             await purchaseOrder.createOrderItem({
-                quantity: req.body[i][quantityKey],
-                productId: req.body[i][productKey]
+                quantity: orderItems[i][quantityKey],
+                productId: orderItems[i][productKey]
             });
         }
 

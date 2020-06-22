@@ -3,7 +3,7 @@ const request = require('supertest');
 const app = require('../index');
 const { db, Order } = require('../db/models');
 
-const { createRandomProducts, createRandomOrder } = require('../../script/seed');
+const { createRandomProducts, createRandomOrder, createRandomOrderTemplate } = require('../../script/seed');
 const { testForAdminOnlyGet } = require('./adminTestingUtils');
 const OrderItem = require('../db/models/orderItem');
 
@@ -33,7 +33,9 @@ describe('Order Routes', () => {
         it('POST adds an order', async () => {
 
             await createRandomProducts(2);
-            const createdOrder = [
+
+            const orderTemplate = createRandomOrderTemplate();
+            orderTemplate.orderItems = [
                 {
                     quantity: 3,
                     productId: 1
@@ -43,13 +45,13 @@ describe('Order Routes', () => {
                     productId: 2
                 },
             ];
-            let res = await request(app).post('/api/orders').send(createdOrder)
+            let res = await request(app).post('/api/orders').send(orderTemplate)
 .expect(200);
             let orders = await Order.findAll();
             expect(orders.length).to.be.equal(2);
 
             let order = await Order.findByPk(res.body.id, { include: [OrderItem] });
-            expect(order.orderItems.length).to.be.equal(createdOrder.length);
+            expect(order.orderItems.length).to.be.equal(orderTemplate.orderItems.length);
         });
     });
 });
