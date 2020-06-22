@@ -9,30 +9,39 @@ import singleProduct from './singleProduct';
 import products from './product';
 import cartReducer, { loadState, saveState } from './localStorage';
 import throttle from 'lodash.throttle';
+import { combineForms } from 'react-redux-form';
 
 const persistedState = loadState();
 
 const reducer = combineReducers({
-    products,
-    product: singleProduct,
-    user: userReducer,
-    order: orderReducer,
-    singleOrder: singleOrderReducer,
-    cart: cartReducer,
+  products,
+  product: singleProduct,
+  user: userReducer,
+  order: orderReducer,
+  singleOrder: singleOrderReducer,
+  cart: cartReducer,
+  checkoutForm: combineForms(
+    {
+      checkout: initialUserState,
+    },
+    'checkoutForm'
+  ),
 });
 
 const middleware = composeWithDevTools(
-    applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
+  applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
 );
 
 const store = createStore(reducer, persistedState, middleware);
 
-store.subscribe(throttle(() => {
+store.subscribe(
+  throttle(() => {
     saveState({
-        cart: store.getState().cart,
-        products: store.getState().products
+      cart: store.getState().cart,
+      products: store.getState().products,
     });
-}, 1000));
+  }, 1000)
+);
 
 export default store;
 export * from './user';
