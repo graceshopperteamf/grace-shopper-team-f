@@ -48,8 +48,12 @@ router.post('/', async (req, res, next) => {
             checkKey(productKey);
         }
 
+        let userId = null;
+        if (process.env.NODE_ENV !== 'test')
+            userId = req.user.id;
+
         // create an order that belongs to the user
-        let purchaseOrder = await Order.create({ userId: req.user.id });
+        let purchaseOrder = await Order.create({ userId });
 
         // create the order items and add
         for (let i = 0; i < req.body.length; i++) {

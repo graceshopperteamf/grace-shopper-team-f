@@ -6,24 +6,7 @@ const app = require('../index');
 const { db, Order } = require('../db/models');
 const { createRandomUsers } = require('../../script/seed');
 
-/*
-    need to check that during non testing environments, only admins can use
-    certain api endpoints. but we also need to suppress the error log so it
-    doesnt clutter up our console during tests
-*/
-const testForAdminOnly = (endpoint) => {
-    return async () => {
-        process.env.NODE_ENV = 'development';
-
-        let oldLogError = console.error;
-        console.error = function() {};
-
-        await request(app).get(endpoint).expect(401);
-
-        console.error = oldLogError;
-        process.env.NODE_ENV = 'test';
-    };
-};
+const { testForAdminOnlyGet } = require('./adminTestingUtils');
 
 describe('User routes', () => {
     let users;
@@ -44,8 +27,8 @@ describe('User routes', () => {
             expect(res.body.email).to.be.equal(users[0].email);
         });
 
-        it('GET lets ONLY an admin see all the users', testForAdminOnly('/api/users'));
-        it('GET /:userId lets ONLY an admin see a specific user', testForAdminOnly(`/api/users/1`));
+        it('GET lets ONLY an admin see all the users', testForAdminOnlyGet('/api/users'));
+        it('GET /:userId lets ONLY an admin see a specific user', testForAdminOnlyGet(`/api/users/1`));
     });
 
     describe('/api/users/', () => {
