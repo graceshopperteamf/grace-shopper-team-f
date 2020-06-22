@@ -28,8 +28,8 @@ const testForAdminOnly = (endpoint) => {
 describe('User routes', () => {
     let users;
     beforeEach(async () => {
+        await db.sync({ force: true });
         users = await createRandomUsers(5);
-        return db.sync({ force: true });
     });
 
     describe('ADMIN /api/users/', () => {
@@ -45,7 +45,7 @@ describe('User routes', () => {
         });
 
         it('GET lets ONLY an admin see all the users', testForAdminOnly('/api/users'));
-        it('GET /:userId lets ONLY an admin see a specific user', testForAdminOnly(`/api/users/${users[0].id}`));
+        it('GET /:userId lets ONLY an admin see a specific user', testForAdminOnly(`/api/users/1`));
     });
 
     describe('/api/users/', () => {
