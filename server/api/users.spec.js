@@ -34,7 +34,7 @@ describe('User routes', () => {
     describe('/api/users/', () => {
 
         it('GET /:userId/orders gets all of a users orders', async () => {
-            const orders = await Order.bulkCreate( (new Array(3)).fill(0).map(e => { return { userId: users[0].id }; } ) );
+            const orders = await Order.bulkCreate( (new Array(3)).fill(0).map(e => { return { userId: users[e].id }; } ) );
 
             let res = await request(app).get(`/api/users/${users[0].id}/orders`).expect(200);
             expect(res.body).to.be.an('array');

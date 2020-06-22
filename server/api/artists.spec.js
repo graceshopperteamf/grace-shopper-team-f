@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const request = require('supertest');
 const app = require('../index');
-const { db, Artist, Product } = require('../db/models');
+const { db, Artist } = require('../db/models');
 const { createRandomProductTemplate, createRandomProduct } = require('../../script/seed');
 
 const { testForAdminOnlyPost, testForAdminOnlyPut, testForAdminOnlyDelete } = require('./adminTestingUtils');
