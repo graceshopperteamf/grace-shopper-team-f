@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 const adminMiddleware = require('./adminMiddleware');
 
-const { Artist, Product } = require('../db/models');
+const { Artist, Product, productKeys } = require('../db/models');
 
 router.get('/', async (req, res, next) => {
     try {
@@ -32,7 +32,15 @@ router.delete('/:productId', adminMiddleware, async (req, res, next) => {
 router.put('/:productId', adminMiddleware, async (req, res, next) => {
     try {
         let product = await Product.findByPk(req.params.productId, { include: [Artist] });
-        product = await product.update(req.body);
+
+
+        // build the product template with keys from the req.body if they're supplied
+        const prod = {};
+        productKeys.forEach(k => {
+            if (k in req.body) prod[k] = req.body[k];
+        });
+
+        product = await product.update(prod);
         res.status(200).json(product);
     }
     catch (e) { next(e); }

@@ -2,51 +2,83 @@ const router = require('express').Router();
 
 const adminMiddleware = require('./adminMiddleware');
 
-const { Order, OrderItem } = require('../db/models');
+const { Order, OrderItem, User, Product } = require('../db/models');
 
 // get all the orders (only admins)
 router.get('/', adminMiddleware, async (req, res, next) => {
     try {
-        const orders = await Order.findAll({
-            where: {
-                isCart: {
-                    [sequelize.Op.not]: true
-                }
-            },
-            include: [OrderItem]
-        });
+        const orders = await Order.findAll({ include: User });
         res.status(200).json(orders);
     }
     catch (e) { next(e); }
 });
 
 /*
-    i think it's safe to assume that the only time an order is being posted,
-    is when a user checks out
+    order is posted anytime a user checks out.
+
+
+    req.body:
+    {
+        billingAddress: '...',
+        mailingAddress: '...',
+        phone: '...'
+        orderItems: [ ... ]
+    }
+
+    req.body.orderItems should be an array of objects where each object is:
+
+    {
+        quantity: 3,
+        productId: 0
+    }
 */
+
 router.post('/', async (req, res, next) => {
     try {
+        const quantityKey = 'quantity';
+        const productKey = 'productId';
+        const orderItemsKey = 'orderItems';
 
-        // first we get the user we're working with (from the database so we get magic methods)
-        let user = await User.findByPk(req.user.id);
+        // validate our request body
+        const orderItems = req.body[orderItemsKey];
 
-        // if they're checking out, their cart should have all the order items they are buying
-        let userCart = await user.getCart();
+        // is it an array?
+        if (!Array.isArray(orderItems))
+            throw new Error(`POST api/orders: request body should contain an array or order items at key: ${orderItemsKey}`);
 
-        // we create a new order object to represent the user's purchase
-        let purchaseOrder = await Order.create();
+        // is it empty?
+        if (orderItems.length <= 0)
+            throw new Error(`POST api/orders: cannot post an empty order array`);
 
-        // set the purchase order's user
-        await user.addOrder(purchaseOrder);
+        // does each element have the appropriate keys?
+        for (let i = 0; i < orderItems.length; i++) {
+            const checkKey = (k) => {
+                if (!(k in orderItems[i]))
+                    throw new Error(`POST api/orders: order item at index ${i} missing key: '${k}'`);
+            };
+            checkKey(quantityKey);
+            checkKey(productKey);
+        }
 
-        // then we transfer the created order items that belong to the cart,
-        // over to the new purchase order
-        // this effectively 'clears' the cart (since now it has no order items)
-        let orderItems = await userCart.getOrderItems();
-        await purchaseOrder.addOrderItems(orderItems);
+        let userId = null;
+        if (process.env.NODE_ENV !== 'test')
+            userId = req.user.id;
 
-        // just to check:
-        console.log('cart order items after transfer:', (await userCart.getOrderItems()));
+        // create an order that belongs to the user
+        let purchaseOrder = await Order.create({
+            userId,
+            billingAddress: req.body.billingAddress,
+            mailingAddress: req.body.mailingAddress,
+            phone: req.body.phone
+        });
+
+        // create the order items and add
+        for (let i = 0; i < orderItems.length; i++) {
+            await purchaseOrder.createOrderItem({
+                quantity: orderItems[i][quantityKey],
+                productId: orderItems[i][productKey]
+            });
+        }
 
         // return the purchase order
         res.status(200).json(purchaseOrder);
@@ -57,7 +89,14 @@ router.post('/', async (req, res, next) => {
 // get a certain order
 router.get('/:orderId', async (req, res, next) => {
     try {
-        const order = await Order.findByPk(req.params.orderId, { include: [OrderItem] });
+        const order = await Order.findByPk(req.params.orderId, {
+            include: {
+                model: OrderItem,
+                include: {
+                    model: Product
+                }
+            }
+        });
         res.status(200).json(order);
     }
     catch (e) { next(e); }

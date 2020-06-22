@@ -1,15 +1,28 @@
-const Sequelize = require('sequelize');
 const db = require('../db');
+const Sequelize = require('sequelize');
 
 const Order = db.define('order', {
-  status: {
-    type: Sequelize.BOOLEAN,
-    defaultValue: false
-  },
-  isCart: {
-    type: Sequelize.BOOLEAN,
-    defaultValue: false
-  }
+    mailingAddress: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+            notEmpty: true,
+        },
+    },
+    billingAddress: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+            notEmpty: true,
+        },
+    },
+    phone: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+            notEmpty: true,
+        },
+    },
 });
 
 module.exports = Order;
