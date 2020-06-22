@@ -10,6 +10,7 @@ describe('Product Model', () => {
             price: 350,
             image: '/public/Claudia_Saimbert/Kira.png',
             type: 'Print - Limited Edition',
+            inventoryQuantity: 10
         };
         return db.sync({ force: true });
     });
@@ -19,6 +20,7 @@ describe('Product Model', () => {
         expect(newProduct.price).to.equal(350);
         expect(newProduct.image).to.equal('/public/Claudia_Saimbert/Kira.png');
         expect(newProduct.type).to.equal('Print - Limited Edition');
+        expect(newProduct.inventoryQuantity).to.equal(10);
     });
     it('title cannot be null', async () => {
         const blankProduct = Product.build();
@@ -29,6 +31,20 @@ describe('Product Model', () => {
             );
         } catch (err) {
             expect(err.message).to.contain('title cannot be null');
+        }
+    });
+
+    it('inventoryQuantity cannot be null', async () => {
+        delete product.inventoryQuantity;
+
+        const blankProduct = Product.build(product);
+        try {
+            await blankProduct.validate();
+            throw Error(
+                'WOMP WOMP, validation should have failed without quantity'
+            );
+        } catch (err) {
+            expect(err.message).to.contain('inventoryQuantity cannot be null');
         }
     });
 
