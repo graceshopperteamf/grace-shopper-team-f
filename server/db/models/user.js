@@ -29,30 +29,9 @@ const User = db.define('user', {
             return () => this.getDataValue('password');
         },
     },
-    mailingAddress: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        validate: {
-            notEmpty: true,
-        },
-    },
-    billingAddress: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        validate: {
-            notEmpty: true,
-        },
-    },
     isAdmin: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
-    },
-    phone: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        validate: {
-            notEmpty: true,
-        },
     },
     salt: {
         type: Sequelize.STRING,
