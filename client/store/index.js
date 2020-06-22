@@ -7,6 +7,9 @@ import orderReducer from './redux-order';
 import singleOrderReducer from './redux-single-order';
 import singleProduct from './singleProduct';
 import products from './product';
+import cartReducer, { loadState, saveState } from './localStorage';
+
+const persistedState = loadState();
 
 const reducer = combineReducers({
     products,
@@ -14,12 +17,20 @@ const reducer = combineReducers({
     user: userReducer,
     order: orderReducer,
     singleOrder: singleOrderReducer,
+    cart: cartReducer,
 });
 
 const middleware = composeWithDevTools(
     applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
 );
-const store = createStore(reducer, middleware);
+
+const store = createStore(reducer, persistedState, middleware);
+
+store.subscribe(() => {
+    saveState({
+        cart: store.getState().cart,
+    });
+});
 
 export default store;
 export * from './user';
