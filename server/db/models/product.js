@@ -29,6 +29,14 @@ const Product = db.define('product', {
             isIn: [['Unique Artwork', 'Print - Limited Edition', 'Print']],
         },
     },
+    inventoryQuantity: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        validate: {
+            min: 0,
+            max: Infinity
+        }
+    }
 });
 
 module.exports = Product;
