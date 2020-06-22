@@ -109,9 +109,9 @@ export default function cartReducer(state = defaultCart, action) {
             };
 
             if (updatedState[idOfItemToRemove].quantity === 0) {
-                saveState(updatedState);
+                saveState(updatedState.filter((item) => item.id !== action.id));
 
-                return updatedState.filter((item) => item.id !== action.id)
+                return updatedState.filter((item) => item.id !== action.id);
             } else {
                 saveState(updatedState);
                 return updatedState;
