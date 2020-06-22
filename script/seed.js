@@ -77,6 +77,22 @@ const seedArtistsAndProducts = async (numArtists, numProductsPerArtist) => {
 /*
     ORDERS
 */
+
+const createRandomOrderTemplate = () => {
+    return {
+        mailingAddress: `${faker.address.streetAddress()} ${faker.address.city()}, ${faker.address.state()} ${faker.address.zipCode()}`,
+        billingAddress: `${faker.address.streetAddress()} ${faker.address.city()}, ${faker.address.state()} ${faker.address.zipCode()}`,
+        phone: faker.phone.phoneNumber(),
+    };
+};
+const createRandomOrder = () => {
+    return Order.create(createRandomOrderTemplate());
+};
+
+const createRandomOrders = (num) => {
+    return Order.bulkCreate((new Array(num)).fill(0).map(() => createRandomOrderTemplate()));
+};
+
 const seedOrders = async (numUsersWhoOrdered, maxNumOrderItems, users, artists) => {
 
     const getRandomProduct = async () => {
@@ -89,7 +105,7 @@ const seedOrders = async (numUsersWhoOrdered, maxNumOrderItems, users, artists) 
 
     for (let i = 0; i < numUsersWhoOrdered; i++) {
 
-        let order = await Order.create({ userId: users[i].id });
+        let order = await Order.create({ userId: users[i].id, ...createRandomOrderTemplate() });
 
         const numItems = randomFrom1ToMax(maxNumOrderItems);
         for (let j = 0; j < numItems; j++) {
@@ -105,12 +121,7 @@ const seedOrders = async (numUsersWhoOrdered, maxNumOrderItems, users, artists) 
     USERS
 */
 const createRandomUserTemplate = (name, email, password) => {
-    return {
-        name, email, password,
-        mailingAddress: `${faker.address.streetAddress()} ${faker.address.city()}, ${faker.address.state()} ${faker.address.zipCode()}`,
-        billingAddress: `${faker.address.streetAddress()} ${faker.address.city()}, ${faker.address.state()} ${faker.address.zipCode()}`,
-        phone: faker.phone.phoneNumber(),
-    };
+    return { name, email, password };
 };
 
 const createRandomUser = (name, email, password) => {
@@ -159,6 +170,7 @@ if (module === require.main) {
 module.exports = {
     seed,
     createRandomProductTemplate, createRandomProduct, createRandomProducts,
-    createRandomUserTemplate, createRandomUser, createRandomUsers
+    createRandomUserTemplate, createRandomUser, createRandomUsers,
+    createRandomOrderTemplate, createRandomOrder, createRandomOrders
 };
 
