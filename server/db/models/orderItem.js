@@ -18,4 +18,14 @@ const OrderItem = db.define('orderItem', {
     }
 });
 
+const onCreate = async (orderItem) => {
+    const prod = await orderItem.getProduct();
+    orderItem.price = prod.price;
+};
+
+OrderItem.beforeCreate(onCreate);
+OrderItem.beforeBulkCreate((orderItems) => {
+    orderItems.forEach(onCreate);
+});
+
 module.exports = OrderItem;
