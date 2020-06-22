@@ -8,6 +8,7 @@ import singleOrderReducer from './redux-single-order';
 import singleProduct from './singleProduct';
 import products from './product';
 import cartReducer, { loadState, saveState } from './localStorage';
+import throttle from 'lodash.throttle';
 
 const persistedState = loadState();
 
@@ -26,11 +27,12 @@ const middleware = composeWithDevTools(
 
 const store = createStore(reducer, persistedState, middleware);
 
-store.subscribe(() => {
+store.subscribe(throttle(() => {
     saveState({
         cart: store.getState().cart,
+        products: store.getState().products
     });
-});
+}, 1000));
 
 export default store;
 export * from './user';
