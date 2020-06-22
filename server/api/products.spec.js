@@ -16,11 +16,11 @@ describe('Product routes', () => {
     describe('ADMIN /api/products/', () => {
 
         it('PUT /:productId Lets an admin edit product in the DB', async () => {
-            let res = await request(app).put(`/api/products/${productAlreadyThere.id}`).send({name: 'an updated name'})
+            let res = await request(app).put(`/api/products/${productAlreadyThere.id}`).send({title: 'an updated name'})
 .expect(200);
             expect(res.body.id).to.be.equal(productAlreadyThere.id);
             productAlreadyThere = await Product.findByPk(res.body.id);
-            expect(productAlreadyThere.name).to.be.equal('an updated name');
+            expect(productAlreadyThere.title).to.be.equal('an updated name');
         });
 
         it('PUT /:productId Lets ONLY an admin edit a product in the DB', testForAdminOnlyPut(`/api/products/1`));
@@ -44,7 +44,7 @@ describe('Product routes', () => {
         it('GET /:productId returns a specified product', async () => {
             const res = await request(app).get(`/api/products/${productAlreadyThere.id}`).expect(200);
             expect(res.body.id).to.be.equal(productAlreadyThere.id);
-            expect(res.body.name).to.be.equal(productAlreadyThere.name);
+            expect(res.body.title).to.be.equal(productAlreadyThere.title);
         });
     });
 });

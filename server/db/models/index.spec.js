@@ -1,10 +1,10 @@
 /* global describe beforeEach it */
 
 const {expect} = require('chai');
-const { db, Order, OrderItem, User, Product, Artist } = require('.');
+const { db, Order, OrderItem, Artist } = require('.');
 
 // get some dummy data
-const { seed, createRandomProduct, createRandomUser } = require('../../../script/seed');
+const { createRandomProducts, createRandomUser } = require('../../../script/seed');
 
 
 describe('Model Associations', () => {
@@ -18,10 +18,9 @@ describe('Model Associations', () => {
 
         beforeEach(async () => {
             artist = await Artist.create({name: 'Test Artist'});
-            products = [];
-            for (let i = 0; i < 2; i++)
-                products.push((await createRandomProduct(`prod ${i}`)));
+            products = await createRandomProducts(2);
         });
+
         const addAndReturn = async () => {
             await artist.addProducts(products);
             return artist.getProducts();
