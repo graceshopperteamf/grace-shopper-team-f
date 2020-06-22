@@ -13,6 +13,7 @@ class AllProducts extends React.Component {
     render() {
         return (
             <div>
+
                 <Grid
                     container
                     direction="row"
@@ -21,9 +22,11 @@ class AllProducts extends React.Component {
                     spacing={2}
                 >
                     {this.props.products.map((product) => (
-                        <Link to={`/products/${product.id}`} key={product.title}>
+                        <div key={product.Id}>
+                            <Link to={`/products/${product.id}`} key={product.title}>'Learn More'</Link>
                             <SingleProduct product={product} />
-                        </Link>
+                        </div>
+
                     ))}
                 </Grid>
             </div>
