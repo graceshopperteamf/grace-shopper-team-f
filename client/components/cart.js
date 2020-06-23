@@ -7,6 +7,7 @@ import {
     clearCart,
 } from '../store/localStorage';
 import CartForm from './CartForm';
+import v4 from 'node-uuid';
 
 class Cart extends React.Component {
     constructor(props) {
@@ -34,38 +35,50 @@ class Cart extends React.Component {
     }
 
     render() {
-        const filteredProducts = [];
+        if (this.props.products) {
+            const filteredProducts = [];
 
-        for (let i = 0; i < this.props.cart.length; i++) {
-            const idOfCurrentProduct = this.props.cart[i].id;
-            const product = this.props.products.filter(
-                (currentProduct) => currentProduct.id === idOfCurrentProduct
-            )[0];
-            const productWithQuantity = {
-                ...product,
-                quantity: this.props.cart[i].quantity,
-            };
+            for (let i = 0; i < this.props.cart.length; i++) {
+                const idOfCurrentProduct = this.props.cart[i].id;
+                const product = this.props.products.filter(
+                    (currentProduct) => currentProduct.id === idOfCurrentProduct
+                )[0];
+                const productWithQuantity = {
+                    ...product,
+                    quantity: this.props.cart[i].quantity,
+                };
 
-            filteredProducts.push(productWithQuantity);
+                filteredProducts.push(productWithQuantity);
+            }
+
+            return filteredProducts.length ? (
+                <div>
+                    {filteredProducts.map((product) => (
+                        <div key={v4()}>
+                            <CartForm
+                                product={product}
+                                products={this.props.products}
+                                handleRemoveClick={this.handleRemoveClick}
+                                handleUpdateClick={this.handleUpdateClick}
+                            />
+                        </div>
+                    ))}
+                    <button
+                        type="button"
+                        onClick={() => this.handleClearClick()}
+                    >
+                        Clear
+                    </button>
+                </div>
+            ) : (
+                <p>
+                    Nothing in your order. Turn back and capture your bounty
+                    like Elliot Ness!
+                </p>
+            );
+        } else {
+            return 'Loading...';
         }
-
-        return filteredProducts.length ? (
-            <div>
-                {filteredProducts.map((product) => (
-                    <div key={product.id}>
-                        <CartForm product={product} handleRemoveClick={this.handleRemoveClick} handleUpdateClick={this.handleUpdateClick} />
-                    </div>
-                ))}
-                <button type="button" onClick={() => this.handleClearClick()}>
-                    Clear
-                </button>
-            </div>
-        ) : (
-            <p>
-                Nothing in your order. Turn back and capture your bounty like
-                Elliot Ness!
-            </p>
-        );
     }
 }
 
@@ -80,8 +93,9 @@ const mapDispatch = (dispatch) => {
     return {
         getAllProducts: () => dispatch(fetchProductsFromServer()),
         removeFromCart: (id) => dispatch(removeFromCart(id)),
-        updateItemFromCart: (id, quantity) => dispatch(updateItemFromCart(id, quantity)),
-        clearCart: () => dispatch(clearCart())
+        updateItemFromCart: (id, quantity) =>
+            dispatch(updateItemFromCart(id, quantity)),
+        clearCart: () => dispatch(clearCart()),
     };
 };
 

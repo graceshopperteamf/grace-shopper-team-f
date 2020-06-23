@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 class CartForm extends React.Component {
     constructor(props) {
@@ -16,7 +17,7 @@ class CartForm extends React.Component {
     }
 
     render() {
-        return (
+        return this.props.products.length ? (
             <div>
                 <p>{this.props.product.title.toUpperCase()}</p>
                 <img
@@ -68,8 +69,16 @@ class CartForm extends React.Component {
                     max={this.props.product.inventoryQuantity}
                 />
             </div>
+        ) : (
+            'loading...'
         );
     }
 }
 
-export default CartForm;
+const mapProducts = (state) => {
+    return {
+        cart: state.cart,
+    };
+};
+
+export default connect(mapProducts, null)(CartForm);

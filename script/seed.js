@@ -2,14 +2,16 @@
 'use strict';
 const fs = require('fs');
 const faker = require('faker');
+
 const {
   db,
+  productTypes,
   User,
   Artist,
   Product,
   Order,
-  OrderItem,
 } = require('../server/db/models');
+
 /*
     helper functions
 */
@@ -37,31 +39,77 @@ const getAllImagePaths = function (dir = 'public', paths = []) {
   return paths;
 };
 const allProductImages = getAllImagePaths();
-const allProductTypes = ['Print - Limited Edition', 'Print', 'Unique Artwork'];
-const createRandomProduct = (title) => {
-  return Product.create({
+
+/*
+    PRODUCTS
+*/
+const createRandomProductTemplate = (title) => {
+  const maxPrice = 500;
+  return {
     title,
-    price: faker.commerce.price(),
+    price: randomFrom1ToMax(100 * maxPrice),
     image: randomChoice(allProductImages),
-    type: randomChoice(allProductTypes),
+    type: randomChoice(productTypes),
     inventoryQuantity: Math.floor(Math.random() * 5),
-  });
+  };
 };
+const createRandomProduct = (title) => {
+  return Product.create(createRandomProductTemplate(title));
+};
+
+const createRandomProducts = (num, titleSuffix) => {
+  return Product.bulkCreate(
+    new Array(num)
+      .fill(0)
+      .map((e, i) => createRandomProductTemplate(`Product ${i}` + titleSuffix))
+  );
+};
+
+/*
+    ARTISTS
+*/
+const createArtists = (num) => {
+  return Artist.bulkCreate(
+    new Array(num).fill(0).map((e, i) => {
+      return { name: `Artist ${i}` };
+    })
+  );
+};
+
 const seedArtistsAndProducts = async (numArtists, numProductsPerArtist) => {
-  let artists = [];
+  const artists = await createArtists(numArtists);
+
   for (let i = 0; i < numArtists; i++) {
-    const artistName = `Artist ${i + 1}`;
-    const artist = await Artist.create({ name: artistName });
-    artists.push(artist);
-    const products = [];
-    for (let j = 0; j < numProductsPerArtist; j++)
-      products.push(
-        await createRandomProduct(`Product ${j + 1} by ${artistName}`)
-      );
-    await artist.addProducts(products);
+    const products = await createRandomProducts(
+      numProductsPerArtist,
+      ` by Artist ${i}`
+    );
+    await artists[i].addProducts(products);
   }
   return artists;
 };
+
+/*
+    ORDERS
+*/
+
+const createRandomOrderTemplate = () => {
+  return {
+    mailingAddress: `${faker.address.streetAddress()} ${faker.address.city()}, ${faker.address.state()} ${faker.address.zipCode()}`,
+    billingAddress: `${faker.address.streetAddress()} ${faker.address.city()}, ${faker.address.state()} ${faker.address.zipCode()}`,
+    phone: faker.phone.phoneNumber(),
+  };
+};
+const createRandomOrder = () => {
+  return Order.create(createRandomOrderTemplate());
+};
+
+const createRandomOrders = (num) => {
+  return Order.bulkCreate(
+    new Array(num).fill(0).map(() => createRandomOrderTemplate())
+  );
+};
+
 const seedOrders = async (
   numUsersWhoOrdered,
   maxNumOrderItems,
@@ -72,43 +120,49 @@ const seedOrders = async (
     const randArtist = randomChoice(artists);
     return randomChoice(await randArtist.getProducts());
   };
+
   if (numUsersWhoOrdered > users.length) numUsersWhoOrdered = users.length;
-  const orders = [];
+
   for (let i = 0; i < numUsersWhoOrdered; i++) {
-    const order = await Order.create();
-    await users[i].addOrder(order);
-    const orderItems = [];
+    let order = await Order.create({
+      userId: users[i].id,
+      ...createRandomOrderTemplate(),
+    });
+
     const numItems = randomFrom1ToMax(maxNumOrderItems);
     for (let j = 0; j < numItems; j++) {
-      const orderItem = await OrderItem.create({
+      await order.createOrderItem({
         quantity: randomFrom1ToMax(5),
+        productId: (await getRandomProduct()).id,
       });
-      await orderItem.setProduct(await getRandomProduct());
-      orderItems.push(orderItem);
     }
-    await order.addOrderItems(orderItems);
-    orders.push(order);
   }
-  return orders;
 };
-const createRandomUser = async (name, email, password) => {
-  return User.create({
-    name,
-    email,
-    password,
-    mailingAddress: `${faker.address.streetAddress()} ${faker.address.city()}, ${faker.address.state()} ${faker.address.zipCode()}`,
-    billingAddress: `${faker.address.streetAddress()} ${faker.address.city()}, ${faker.address.state()} ${faker.address.zipCode()}`,
-    phone: faker.phone.phoneNumber(),
-  });
+
+/*
+    USERS
+*/
+const createRandomUserTemplate = (name, email, password) => {
+  return { name, email, password };
 };
-const seedUsers = async (num) => {
-  let users = [];
-  for (let i = 1; i <= num; i++)
-    users.push(
-      await createRandomUser(`User ${i}`, `User${i}@site.com`, `password${i}`)
-    );
-  return users;
+
+const createRandomUser = (name, email, password) => {
+  return User.create(createRandomUserTemplate(name, email, password));
 };
+
+const createRandomUsers = (num) => {
+  return User.bulkCreate(
+    new Array(num)
+      .fill(0)
+      .map((e, i) =>
+        createRandomUserTemplate(
+          `User ${i}`,
+          `User${i}@site.com`,
+          `password${i}`
+        ))
+  );
+};
+
 const seed = async (
   numArtists = 2,
   numProductsPerArtist = 2,
@@ -123,13 +177,8 @@ const seed = async (
       numArtists,
       numProductsPerArtist
     );
-    const users = await seedUsers(numUsers);
-    const orders = await seedOrders(
-      numUsersWhoOrdered,
-      maxNumOrderItems,
-      users,
-      artists
-    );
+    const users = await createRandomUsers(numUsers);
+    await seedOrders(numUsersWhoOrdered, maxNumOrderItems, users, artists);
     console.log(`seeded successfully`);
   } catch (err) {
     console.log(err);
@@ -151,4 +200,17 @@ async function runSeed() {
 if (module === require.main) {
   runSeed();
 }
-module.exports = { seed, createRandomProduct, createRandomUser };
+
+// export helper functions for tests
+module.exports = {
+  seed,
+  createRandomProductTemplate,
+  createRandomProduct,
+  createRandomProducts,
+  createRandomUserTemplate,
+  createRandomUser,
+  createRandomUsers,
+  createRandomOrderTemplate,
+  createRandomOrder,
+  createRandomOrders,
+};

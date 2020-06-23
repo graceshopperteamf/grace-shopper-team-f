@@ -1,53 +1,57 @@
 const { expect } = require('chai');
 const request = require('supertest');
-const agent = request.agent(app);
 const app = require('../index');
-const { db, Order, OrderItem } = require('../db/models');
+const { db, Order } = require('../db/models');
+
+const { createRandomProducts, createRandomOrder, createRandomOrderTemplate } = require('../../script/seed');
+const { testForAdminOnlyGet } = require('./adminTestingUtils');
+const OrderItem = require('../db/models/orderItem');
 
 describe('Order Routes', () => {
-  beforeEach(() => {
-    return db.sync({ force: true });
-  });
-
-  describe('Order /api/orders', () => {
-    let createdOrder;
     beforeEach(async () => {
-      createdOrder = [];
-      // createdItem = [];
-      let testOrder = [
-        { status: false, isCart: false },
-        { status: true, isCart: true }
-      ];
-
-      for (let i = 0; i < testOrder.length; i++) {
-        createdOrder.push(await Order.create(testOrder[i]));
-      }
-
+        await db.sync({ force: true });
+        await createRandomOrder();
     });
 
-    it('lets an admin see all the orders', async () => {
-      let testOrder = [
-        { status: false, isCart: false },
-        { status: true, isCart: true }
-      ];
-      // const res = await request(app).get('/api/orders').expect(200);
-      expect(testOrder).to.be.an('array');
-      expect(testOrder[0].status).to.be.equal(testOrder[0].status);
+
+    describe('ADMIN /api/orders/', () => {
+        it('GET lets an admin see all the orders', async () => {
+            const res = await request(app).get('/api/orders').expect(200);
+            expect(res.body).to.be.an('array');
+            expect(res.body.length).to.be.equal(1);
+        });
+
+        it('GET lets ONLY an admin see all the orders', testForAdminOnlyGet('/api/orders'));
     });
-    it('Get a certain Order', async () => {
-      let testOrder = [
-        { status: false, isCart: false },
-        { status: true, isCart: true }
-      ];
-      // const res = await request(app).get('/api/orders').expect(200);
-      expect(testOrder).to.be.an('array');
-      expect(testOrder[0]).to.be.equal(testOrder[0]);
-      expect(testOrder[1]).to.be.equal(testOrder[1]);
+    describe('/api/orders/', () => {
+
+        it('GET /:orderId returns a specified order', async () => {
+            const res = await request(app).get(`/api/orders/1`).expect(200);
+            expect(res.body.id).to.be.equal(1);
+        });
+
+        it('POST adds an order', async () => {
+
+            await createRandomProducts(2);
+
+            const orderTemplate = createRandomOrderTemplate();
+            orderTemplate.orderItems = [
+                {
+                    quantity: 3,
+                    productId: 1
+                },
+                {
+                    quantity: 3,
+                    productId: 2
+                },
+            ];
+            let res = await request(app).post('/api/orders').send(orderTemplate)
+.expect(200);
+            let orders = await Order.findAll();
+            expect(orders.length).to.be.equal(2);
+
+            let order = await Order.findByPk(res.body.id, { include: [OrderItem] });
+            expect(order.orderItems.length).to.be.equal(orderTemplate.orderItems.length);
+        });
     });
-    it('GET lets ONLY an admin see all the orders', async () => {
-      process.env.NODE_ENV = 'development';
-      const res = await request(app).get('/api/orders').expect(401);
-      process.env.NODE_ENV = 'test';
-    });
-  });
 });
