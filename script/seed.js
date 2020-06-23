@@ -164,8 +164,8 @@ const createRandomUsers = (num) => {
 };
 
 const seed = async (
-  numArtists = 2,
-  numProductsPerArtist = 2,
+  numArtists = 3,
+  numProductsPerArtist = 3,
   numUsers = 3,
   numUsersWhoOrdered = 2,
   maxNumOrderItems = 5

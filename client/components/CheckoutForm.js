@@ -11,7 +11,7 @@ class CheckoutForm extends Component {
   //need to add functionality and validation
 
   render() {
-    const { pristine, reset, submitting } = this.props;
+    //const { pristine, reset, submitting } = this.props;
     return (
       <div>
         <hr />
@@ -42,7 +42,7 @@ class CheckoutForm extends Component {
           <Field label="State" name="state" type="text" />
           <Field label="Zip" name="zip" type="text" />
 
-          <div>
+          {/* <div>
             <button
               type="submit"
               disabled={submitting}
@@ -61,7 +61,7 @@ class CheckoutForm extends Component {
             <div>
               <button type="button">Cancel</button>
             </div>
-          </div>
+          </div> */}
         </form>
       </div>
     );
