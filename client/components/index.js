@@ -9,4 +9,4 @@ export { Login, Signup } from './auth-form';
 export { default as AllProducts } from './AllProducts';
 export { default as SingleProductView } from './SingleProductView';
 export { default as Cart } from './cart';
-export { default as CheckoutForm } from './CheckoutForm';
+export { default as Checkout } from './CheckoutForm';

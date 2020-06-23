@@ -1,7 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { Field } from 'redux-form';
-class CheckoutForm extends Component {
+import { Field, Form } from 'redux-form';
+class Checkout extends React.Component {
+
+  //Get user Cart?/
   //handleSubmit will send order to Stripe? and order id to confirmation page
 
   //   handleSubmit = async (event) => {
@@ -15,32 +17,82 @@ class CheckoutForm extends Component {
     return (
       <div>
         <hr />
-        <form>
+        <Form>
           <h2>Shipping Information</h2>
-          <Field label="First name" name="firstName" type="text" />
-          <Field label="Last name" name="lastName" type="text" />
+          <Field
+            label="First name"
+            name="firstName"
+            component="input"
+            type="text"
+          />
+          <Field
+            label="Last name"
+            name="lastName"
+            component="input"
+            type="text"
+          />
           <Field
             label="Email"
             name="email"
             type="email"
             placeholder="email@example.com"
           />
-          <Field label="Phone" name="phone" type="text" />
+          <Field label="Phone" name="phone" component="input" type="text" />
           <Field
             label="Street address"
             name="street1"
+            component="input"
             type="text"
             placeholder="Street and number, P.O. box, etc."
           />
           <Field
             label="Unit number"
             name="street2"
+            component="input"
             type="text"
             placeholder="Apartment, suite, building, etc."
           />
-          <Field label="City" name="city" type="text" />
-          <Field label="State" name="state" type="text" />
-          <Field label="Zip" name="zip" type="text" />
+          <Field label="City" name="city" component="input" type="text" />
+          <Field label="State" name="state" component="input" type="text" />
+          <Field label="Zip" name="zip" component="input" type="text" />
+
+          <h2>Shipping Information</h2>
+          <Field
+            label="First name"
+            name="firstName"
+            component="input"
+            type="text"
+          />
+          <Field
+            label="Last name"
+            name="lastName"
+            component="input"
+            type="text"
+          />
+          <Field
+            label="Email"
+            name="email"
+            type="email"
+            placeholder="email@example.com"
+          />
+          <Field label="Phone" name="phone" component="input" type="text" />
+          <Field
+            label="Street address"
+            name="street1"
+            component="input"
+            type="text"
+            placeholder="Street and number, P.O. box, etc."
+          />
+          <Field
+            label="Unit number"
+            name="street2"
+            component="input"
+            type="text"
+            placeholder="Apartment, suite, building, etc."
+          />
+          <Field label="City" name="city" component="input" type="text" />
+          <Field label="State" name="state" component="input" type="text" />
+          <Field label="Zip" name="zip" component="input" type="text" />
 
           {/* <div>
             <button
@@ -62,10 +114,10 @@ class CheckoutForm extends Component {
               <button type="button">Cancel</button>
             </div>
           </div> */}
-        </form>
+        </Form>
       </div>
     );
   }
 }
 
-export default connect(CheckoutForm);
+export default connect(Checkout);
