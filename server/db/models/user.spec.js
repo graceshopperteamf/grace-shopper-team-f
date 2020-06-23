@@ -60,7 +60,6 @@ describe('User model', () => {
                 }
             };
         };
-        it('`name` is required', validationTestNull('name'));
 
         const validationTestEmpty = (testColumn) => {
             return async () => {
@@ -75,7 +74,7 @@ describe('User model', () => {
                 }
             };
         };
-        it('requires `name` to not be an empty string', validationTestEmpty('name'));
+
         it('requires `email` to not be an empty string', validationTestEmpty('email'));
 
         it('`isAdmin` has a default value of false', async () => {
