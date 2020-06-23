@@ -140,6 +140,8 @@ const seed = async (numArtists = 2, numProductsPerArtist = 2, numUsers = 3, numU
         const artists = await seedArtistsAndProducts(numArtists, numProductsPerArtist);
         const users = await createRandomUsers(numUsers);
         await seedOrders(numUsersWhoOrdered, maxNumOrderItems, users, artists);
+
+        await User.create(createRandomUserTemplate('Admin', 'Admin@site.com', 'adminpassword'));
         console.log(`seeded successfully`);
     }
     catch (err) {
