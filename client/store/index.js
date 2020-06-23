@@ -16,6 +16,7 @@ const reducer = combineReducers({
   order: orderReducer,
   singleOrder: singleOrderReducer,
   cart: cartReducer,
+  //need to add combineForms
 });
 
 const middleware = composeWithDevTools(
