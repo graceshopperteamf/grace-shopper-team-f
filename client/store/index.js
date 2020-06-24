@@ -10,16 +10,17 @@ import products from './product';
 import cartReducer from './localStorage';
 
 const reducer = combineReducers({
-    products,
-    product: singleProduct,
-    user: userReducer,
-    order: orderReducer,
-    singleOrder: singleOrderReducer,
-    cart: cartReducer,
+  products,
+  product: singleProduct,
+  user: userReducer,
+  order: orderReducer,
+  singleOrder: singleOrderReducer,
+  cart: cartReducer,
+  //need to add combineForms
 });
 
 const middleware = composeWithDevTools(
-    applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
+  applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
 );
 
 const store = createStore(reducer, middleware);
