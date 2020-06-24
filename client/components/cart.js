@@ -10,92 +10,89 @@ import CartForm from './CartForm';
 import v4 from 'node-uuid';
 
 class Cart extends React.Component {
-  constructor(props) {
-    super(props);
+    constructor(props) {
+        super(props);
 
-    this.handleRemoveClick = this.handleRemoveClick.bind(this);
-    this.handleClearClick = this.handleClearClick.bind(this);
-    this.handleUpdateClick = this.handleUpdateClick.bind(this);
-    this.handleSubmitClick = this.handleSubmitClick.bind(this);
-  }
+        this.handleRemoveClick = this.handleRemoveClick.bind(this);
+        this.handleClearClick = this.handleClearClick.bind(this);
+        this.handleUpdateClick = this.handleUpdateClick.bind(this);
+        this.handleSubmitClick = this.handleSubmitClick.bind(this);
+    }
 
-  componentDidMount() {
-    const idsOfProducts = this.props.cart.map((item) => item.id);
-    const objectOfIds = { id: idsOfProducts };
+    componentDidMount() {
+        const idsOfProducts = this.props.cart.map((item) => item.id);
+        const objectOfIds = { id: idsOfProducts };
 
-    this.props.getSelectProducts(objectOfIds);
-  }
+        this.props.getSelectProducts(objectOfIds);
+    }
 
-  handleRemoveClick(id) {
-    this.props.removeFromCart(id);
-  }
+    handleRemoveClick(id) {
+        this.props.removeFromCart(id);
+    }
 
-  handleClearClick() {
-    this.props.clearCart();
-  }
+    handleClearClick() {
+        this.props.clearCart();
+    }
 
-  handleUpdateClick(id, quantity) {
-    this.props.updateItemFromCart(id, Number(quantity));
-  }
+    handleUpdateClick(id, quantity) {
+        this.props.updateItemFromCart(id, Number(quantity));
+    }
 
-  handleSubmitClick(event) {
-    event.preventDefault();
-    this.props.history.push('/products');
-  }
+    handleSubmitClick(event) {
+        event.preventDefault();
+        this.props.history.push('/checkout');
+    }
 
-  handleSubmitClick(event) {
-    event.preventDefault();
-    this.props.history.push('/checkout');
-  }
+    render() {
+        if (this.props.filteredProducts.length) {
+            const filteredProducts = [];
+            let total = 0;
 
-  render() {
-    if (this.props.filteredProducts.length) {
-      const filteredProducts = [];
-      let total = 0;
+            for (let i = 0; i < this.props.cart.length; i++) {
+                const idOfCurrentProduct = this.props.cart[i].id;
+                const product = this.props.filteredProducts.filter(
+                    (currentProduct) => currentProduct.id === idOfCurrentProduct
+                )[0];
+                const productWithQuantity = {
+                    ...product,
+                    quantity: this.props.cart[i].quantity,
+                };
 
-      for (let i = 0; i < this.props.cart.length; i++) {
-        const idOfCurrentProduct = this.props.cart[i].id;
-        const product = this.props.filteredProducts.filter(
-          (currentProduct) => currentProduct.id === idOfCurrentProduct
-        )[0];
-        const productWithQuantity = {
-          ...product,
-          quantity: this.props.cart[i].quantity,
-        };
+                total += productWithQuantity.price * productWithQuantity.quantity;
 
-        total += productWithQuantity.price * productWithQuantity.quantity;
+                filteredProducts.push(productWithQuantity);
+            }
 
-        filteredProducts.push(productWithQuantity);
-      }
-
-      return filteredProducts.length ? (
-        <div>
-          {filteredProducts.map((product) => (
-            <div key={v4()}>
-              <CartForm
-                product={product}
-                filteredProducts={filteredProducts}
-                handleRemoveClick={this.handleRemoveClick}
-                handleUpdateClick={this.handleUpdateClick}
-              />
-            </div>
-          ))}
-          <button type="button" onClick={() => this.handleClearClick()}>
-            Clear
-          </button>
-          <p>Total: ${total.toLocaleString('en-US')}</p>
-          <button type="submit" onClick={this.handleSubmitClick}>
-            submit
-          </button>
-        </div>
-      ) : (
-        <p>
-          Nothing in your cart. Turn back and capture your bounty like Elliot
-          Ness!
-        </p>
-      );
-    } else {
-      return 'Loading...';
+            return filteredProducts.length ? (
+                <div>
+                    {filteredProducts.map((product) => (
+                        <div key={v4()}>
+                            <CartForm
+                                product={product}
+                                filteredProducts={filteredProducts}
+                                handleRemoveClick={this.handleRemoveClick}
+                                handleUpdateClick={this.handleUpdateClick}
+                            />
+                        </div>
+                    ))}
+                    <button
+                        type="button"
+                        onClick={() => this.handleClearClick()}
+                    >
+                        Clear
+                    </button>
+                    <p>Total: ${(total).toLocaleString('en-US')}</p>
+                    <button type="submit" onClick={this.handleSubmitClick}>Go to checkout</button>
+                </div>
+            ) : (
+                <p>
+                    Nothing in your cart. Turn back and capture your bounty
+                    like Elliot Ness!
+                </p>
+            );
+        } else {
+            return 'Loading...';
+        }
     }
   }
 }
