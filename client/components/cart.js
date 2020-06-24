@@ -40,6 +40,7 @@ class Cart extends React.Component {
     render() {
         if (this.props.filteredProducts.length) {
             const filteredProducts = [];
+            let total = 0;
 
             for (let i = 0; i < this.props.cart.length; i++) {
                 const idOfCurrentProduct = this.props.cart[i].id;
@@ -50,6 +51,8 @@ class Cart extends React.Component {
                     ...product,
                     quantity: this.props.cart[i].quantity,
                 };
+
+                total += productWithQuantity.price * productWithQuantity.quantity;
 
                 filteredProducts.push(productWithQuantity);
             }
@@ -72,6 +75,7 @@ class Cart extends React.Component {
                     >
                         Clear
                     </button>
+                    <p>Total: ${(total).toLocaleString('en-US')}</p>
                 </div>
             ) : (
                 <p>
