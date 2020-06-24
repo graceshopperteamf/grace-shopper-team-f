@@ -1,5 +1,3 @@
-import { toast } from 'react-toastify';
-
 export const loadState = () => {
     try {
         const serializedState = localStorage.getItem('cart');
@@ -19,6 +17,7 @@ export const saveState = (cart) => {
         console.log(err);
     }
 };
+
 const ADD_ITEM = 'ADD_ITEM';
 const REMOVE_ITEM = 'REMOVE_ITEM';
 const UPDATE_ITEM = 'UPDATE_ITEM';
@@ -42,7 +41,6 @@ export const clearCart = () => ({ type: CLEAR_CART });
 export default function cartReducer(state = defaultCart, action) {
     switch (action.type) {
         case ADD_ITEM:
-            toast.success('Added To Cart!');
             const updatedCart = [...state];
             let itemAlreadyExists = false;
             for (let i = 0; i < updatedCart.length; i++) {

@@ -5,8 +5,6 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import history from './history';
 import store from './store';
 import App from './app';
-import { ToastContainer } from 'react-toastify';
-
 
 // establishes socket connection
 import './socket';
@@ -14,11 +12,8 @@ import './socket';
 ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
-
       <App />
-
     </Router>
-    <ToastContainer />
   </Provider>,
   document.getElementById('app')
 );
