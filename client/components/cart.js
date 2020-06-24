@@ -40,7 +40,7 @@ class Cart extends React.Component {
 
     handleSubmitClick(event) {
         event.preventDefault();
-        this.props.history.push('/products');
+        this.props.history.push('/checkout');
     }
 
     render() {
@@ -82,7 +82,7 @@ class Cart extends React.Component {
                         Clear
                     </button>
                     <p>Total: ${(total).toLocaleString('en-US')}</p>
-                    <button type="submit" onClick={this.handleSubmitClick}>submit</button>
+                    <button type="submit" onClick={this.handleSubmitClick}>Go to checkout</button>
                 </div>
             ) : (
                 <p>
