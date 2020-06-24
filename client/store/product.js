@@ -9,7 +9,7 @@ const getProducts = (products) => ({ type: GET_PRODUCTS, products });
 export const fetchProductsFromServer = () => async (dispatch) => {
     try {
         const res = await axios.get('/api/products');
-        dispatch(getProducts(res.data || defaultProducts));
+        dispatch(getProducts(res.data));
     } catch (err) {
         console.error(err);
     }
