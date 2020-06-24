@@ -16,6 +16,7 @@ class Cart extends React.Component {
         this.handleRemoveClick = this.handleRemoveClick.bind(this);
         this.handleClearClick = this.handleClearClick.bind(this);
         this.handleUpdateClick = this.handleUpdateClick.bind(this);
+        this.handleSubmitClick = this.handleSubmitClick.bind(this);
     }
 
     componentDidMount() {
@@ -35,6 +36,11 @@ class Cart extends React.Component {
 
     handleUpdateClick(id, quantity) {
         this.props.updateItemFromCart(id, Number(quantity));
+    }
+
+    handleSubmitClick(event) {
+        event.preventDefault();
+        this.props.history.push('/products');
     }
 
     render() {
@@ -76,6 +82,7 @@ class Cart extends React.Component {
                         Clear
                     </button>
                     <p>Total: ${(total).toLocaleString('en-US')}</p>
+                    <button type="submit" onClick={this.handleSubmitClick}>submit</button>
                 </div>
             ) : (
                 <p>
