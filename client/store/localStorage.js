@@ -1,3 +1,5 @@
+import { toast } from 'react-toastify';
+
 export const loadState = () => {
     try {
         const serializedState = localStorage.getItem('cart');
@@ -31,12 +33,26 @@ const UPDATE_ITEM = 'UPDATE_ITEM';
 const CLEAR_CART = 'CLEAR_CART';
 
 const defaultCart = [...loadState()] || [];
+export function addToCart(id, inventoryQuantity) {
+    return function (dispatch) {
+        dispatch({
+            type: ADD_ITEM,
+            id,
+            inventoryQuantity
+        });
+        // toast('added to cart', {
+        //     position: toast.POSITION.TOP_RIGHT
+        // });
+    };
+}
 
-export const addToCart = (id, inventoryQuantity) => ({
-    type: ADD_ITEM,
-    id,
-    inventoryQuantity,
-});
+// export const addToCart = (id, inventoryQuantity) => ({
+//     type: ADD_ITEM,
+//     id,
+//     inventoryQuantity,
+
+
+// });
 
 export const removeFromCart = (id) => ({ type: REMOVE_ITEM, id });
 
@@ -51,6 +67,7 @@ export const clearCart = () => ({ type: CLEAR_CART });
 export default function cartReducer(state = defaultCart, action) {
     switch (action.type) {
         case ADD_ITEM:
+            toast.success('Added To Cart!');
             const updatedCart = [...state];
             let itemAlreadyExists = false;
 
