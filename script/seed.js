@@ -1,5 +1,6 @@
 /* eslint-disable max-statements */
 'use strict';
+
 const fs = require('fs');
 const faker = require('faker');
 
@@ -28,16 +29,17 @@ const getAllImagePaths = function (dir = 'public', paths = []) {
   fs.readdirSync(dir).forEach((file) => {
     const path = dir + '/' + file;
     if (fs.statSync(path).isDirectory()) {
-      // if it's a directory, recursively check for image files...
+      // if it's a direcotry, recursively cehck for image files...
       paths = getAllImagePaths(path, paths);
     }
-    // check if it's an image file, if it is, add it to our array
+    // check if it'a an image file, if it is, add it to our array
     else if (path.endsWith('.jpg') || path.endsWith('.png')) {
       paths.push(path.substring(6));
     }
   });
   return paths;
 };
+
 const allProductImages = getAllImagePaths();
 
 /*
@@ -164,8 +166,8 @@ const createRandomUsers = (num) => {
 };
 
 const seed = async (
-  numArtists = 3,
-  numProductsPerArtist = 3,
+  numArtists = 2,
+  numProductsPerArtist = 2,
   numUsers = 3,
   numUsersWhoOrdered = 2,
   maxNumOrderItems = 5
@@ -179,11 +181,16 @@ const seed = async (
     );
     const users = await createRandomUsers(numUsers);
     await seedOrders(numUsersWhoOrdered, maxNumOrderItems, users, artists);
+
+    await User.create(
+      createRandomUserTemplate('Admin', 'Admin@site.com', 'adminpassword')
+    );
     console.log(`seeded successfully`);
   } catch (err) {
     console.log(err);
   }
 };
+
 async function runSeed() {
   console.log('seeding...');
   try {
@@ -197,6 +204,7 @@ async function runSeed() {
     console.log('db connection closed');
   }
 }
+
 if (module === require.main) {
   runSeed();
 }
