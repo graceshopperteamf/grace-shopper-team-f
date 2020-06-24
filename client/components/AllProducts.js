@@ -9,7 +9,7 @@ class AllProducts extends React.Component {
     componentDidMount() {
         this.props.getAllProducts();
     }
-
+    //consistent coding style in components
     render() {
         return (
             <div>
