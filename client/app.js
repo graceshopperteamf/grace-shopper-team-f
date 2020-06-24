@@ -8,6 +8,7 @@ const App = () => {
     <Container>
       <Navbar />
       <Routes />
+      {/* <CheckoutForm /> */}
     </Container>
   );
 };
