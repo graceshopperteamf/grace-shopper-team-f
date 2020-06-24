@@ -11,6 +11,7 @@ import cartReducer from './localStorage';
 import filteredProductsReducer from './filteredProducts';
 
 const reducer = combineReducers({
+
     products,
     product: singleProduct,
     filteredProducts: filteredProductsReducer,
@@ -18,10 +19,12 @@ const reducer = combineReducers({
     order: orderReducer,
     singleOrder: singleOrderReducer,
     cart: cartReducer,
+
+
 });
 
 const middleware = composeWithDevTools(
-    applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
+  applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
 );
 
 const store = createStore(reducer, middleware);

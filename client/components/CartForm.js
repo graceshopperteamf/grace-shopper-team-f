@@ -82,7 +82,7 @@ class CartForm extends React.Component {
         );
     }
 }
-
+// changes the link to checkout render the checkout form
 const mapProducts = (state) => {
     return {
         cart: state.cart,
