@@ -6,18 +6,23 @@ class CartForm extends React.Component {
         super(props);
 
         this.state = {
-            quantity: 0,
+            quantity: this.props.product.quantity
         };
 
         this.handleChange = this.handleChange.bind(this);
+        this.handleKeyDown = this.handleKeyDown.bind(this);
     }
 
     handleChange(event) {
         this.setState({ quantity: Number(event.target.value) });
     }
 
+    handleKeyDown(event) {
+        event.preventDefault();
+    }
+
     render() {
-        return this.props.products.length ? (
+        return this.props.filteredProducts.length ? (
             <div>
                 <p>{this.props.product.title.toUpperCase()}</p>
                 <img
@@ -60,7 +65,7 @@ class CartForm extends React.Component {
                 </label>
 
                 <input
-                    onChange={this.handleChange}
+                    onChange={this.handleChange} tabIndex="1" size="4" onKeyDown={this.handleKeyDown}
                     value={this.state.quantity}
                     type="number"
                     id={this.props.product.id}
@@ -70,7 +75,10 @@ class CartForm extends React.Component {
                 />
             </div>
         ) : (
-            'loading...'
+            <p>
+                Nothing in your cart. Turn back and capture your bounty
+                like Elliot Ness!
+            </p>
         );
     }
 }
