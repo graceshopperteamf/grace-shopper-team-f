@@ -25,27 +25,6 @@ const UPDATE_ITEM = 'UPDATE_ITEM';
 const CLEAR_CART = 'CLEAR_CART';
 const defaultCart = [...loadState()] || [];
 
-export function addToCart(id, inventoryQuantity) {
-    return function (dispatch) {
-        dispatch({
-            type: ADD_ITEM,
-            id,
-            inventoryQuantity
-        });
-        // toast('added to cart', {
-        //     position: toast.POSITION.TOP_RIGHT
-        // });
-    };
-}
-
-// export const addToCart = (id, inventoryQuantity) => ({
-//     type: ADD_ITEM,
-//     id,
-//     inventoryQuantity,
-
-
-// });
-
 export const addToCart = (id, inventoryQuantity) => ({
     type: ADD_ITEM,
     id,
@@ -58,6 +37,7 @@ export const updateItemFromCart = (id, quantity) => ({
     id,
     quantity,
 });
+
 export const clearCart = () => ({ type: CLEAR_CART });
 export default function cartReducer(state = defaultCart, action) {
     switch (action.type) {
