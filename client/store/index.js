@@ -8,15 +8,19 @@ import singleOrderReducer from './redux-single-order';
 import singleProduct from './singleProduct';
 import products from './product';
 import cartReducer from './localStorage';
+import filteredProductsReducer from './filteredProducts';
 
 const reducer = combineReducers({
-  products,
-  product: singleProduct,
-  user: userReducer,
-  order: orderReducer,
-  singleOrder: singleOrderReducer,
-  cart: cartReducer,
-  //need to add combineForms
+
+    products,
+    product: singleProduct,
+    filteredProducts: filteredProductsReducer,
+    user: userReducer,
+    order: orderReducer,
+    singleOrder: singleOrderReducer,
+    cart: cartReducer,
+
+
 });
 
 const middleware = composeWithDevTools(

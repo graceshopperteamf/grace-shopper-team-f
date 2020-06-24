@@ -1,5 +1,5 @@
 import React from 'react';
-import { fetchProductsFromServer } from '../store/product';
+import { fetchFilteredProductsFromServer } from '../store/filteredProducts';
 import { connect } from 'react-redux';
 import {
     removeFromCart,
@@ -16,10 +16,14 @@ class Cart extends React.Component {
         this.handleRemoveClick = this.handleRemoveClick.bind(this);
         this.handleClearClick = this.handleClearClick.bind(this);
         this.handleUpdateClick = this.handleUpdateClick.bind(this);
+        this.handleSubmitClick = this.handleSubmitClick.bind(this);
     }
 
     componentDidMount() {
-        this.props.getAllProducts();
+        const idsOfProducts = this.props.cart.map((item) => item.id);
+        const objectOfIds = { id: idsOfProducts };
+
+        this.props.getSelectProducts(objectOfIds);
     }
 
     handleRemoveClick(id) {
@@ -34,19 +38,27 @@ class Cart extends React.Component {
         this.props.updateItemFromCart(id, Number(quantity));
     }
 
+    handleSubmitClick(event) {
+        event.preventDefault();
+        this.props.history.push('/products');
+    }
+
     render() {
-        if (this.props.products) {
+        if (this.props.filteredProducts.length) {
             const filteredProducts = [];
+            let total = 0;
 
             for (let i = 0; i < this.props.cart.length; i++) {
                 const idOfCurrentProduct = this.props.cart[i].id;
-                const product = this.props.products.filter(
+                const product = this.props.filteredProducts.filter(
                     (currentProduct) => currentProduct.id === idOfCurrentProduct
                 )[0];
                 const productWithQuantity = {
                     ...product,
                     quantity: this.props.cart[i].quantity,
                 };
+
+                total += productWithQuantity.price * productWithQuantity.quantity;
 
                 filteredProducts.push(productWithQuantity);
             }
@@ -57,7 +69,7 @@ class Cart extends React.Component {
                         <div key={v4()}>
                             <CartForm
                                 product={product}
-                                products={this.props.products}
+                                filteredProducts={filteredProducts}
                                 handleRemoveClick={this.handleRemoveClick}
                                 handleUpdateClick={this.handleUpdateClick}
                             />
@@ -69,10 +81,12 @@ class Cart extends React.Component {
                     >
                         Clear
                     </button>
+                    <p>Total: ${(total).toLocaleString('en-US')}</p>
+                    <button type="submit" onClick={this.handleSubmitClick}>submit</button>
                 </div>
             ) : (
                 <p>
-                    Nothing in your order. Turn back and capture your bounty
+                    Nothing in your cart. Turn back and capture your bounty
                     like Elliot Ness!
                 </p>
             );
@@ -84,14 +98,16 @@ class Cart extends React.Component {
 
 const mapProducts = (state) => {
     return {
+        filteredProducts: state.filteredProducts,
         cart: state.cart,
-        products: state.products,
+        user: state.user,
     };
 };
 
 const mapDispatch = (dispatch) => {
     return {
-        getAllProducts: () => dispatch(fetchProductsFromServer()),
+        getSelectProducts: (objectOfIds) =>
+            dispatch(fetchFilteredProductsFromServer(objectOfIds)),
         removeFromCart: (id) => dispatch(removeFromCart(id)),
         updateItemFromCart: (id, quantity) =>
             dispatch(updateItemFromCart(id, quantity)),
