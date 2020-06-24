@@ -2,9 +2,9 @@ import React from 'react';
 import { fetchFilteredProductsFromServer } from '../store/filteredProducts';
 import { connect } from 'react-redux';
 import {
-    removeFromCart,
-    updateItemFromCart,
-    clearCart,
+  removeFromCart,
+  updateItemFromCart,
+  clearCart,
 } from '../store/localStorage';
 import CartForm from './CartForm';
 import v4 from 'node-uuid';
@@ -94,25 +94,26 @@ class Cart extends React.Component {
             return 'Loading...';
         }
     }
+  }
 }
 
 const mapProducts = (state) => {
-    return {
-        filteredProducts: state.filteredProducts,
-        cart: state.cart,
-        user: state.user,
-    };
+  return {
+    filteredProducts: state.filteredProducts,
+    cart: state.cart,
+    user: state.user,
+  };
 };
 
 const mapDispatch = (dispatch) => {
-    return {
-        getSelectProducts: (objectOfIds) =>
-            dispatch(fetchFilteredProductsFromServer(objectOfIds)),
-        removeFromCart: (id) => dispatch(removeFromCart(id)),
-        updateItemFromCart: (id, quantity) =>
-            dispatch(updateItemFromCart(id, quantity)),
-        clearCart: () => dispatch(clearCart()),
-    };
+  return {
+    getSelectProducts: (objectOfIds) =>
+      dispatch(fetchFilteredProductsFromServer(objectOfIds)),
+    removeFromCart: (id) => dispatch(removeFromCart(id)),
+    updateItemFromCart: (id, quantity) =>
+      dispatch(updateItemFromCart(id, quantity)),
+    clearCart: () => dispatch(clearCart()),
+  };
 };
 
 export default connect(mapProducts, mapDispatch)(Cart);

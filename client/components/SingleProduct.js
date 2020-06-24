@@ -32,15 +32,16 @@ class SingleProduct extends React.Component {
 }
 
 const mapState = (state) => {
-    return {
-        cart: state.cart
-    };
+  return {
+    cart: state.cart,
+  };
 };
 
 const mapDispatch = (dispatch) => {
-    return {
-        addToCart: (id, inventoryQuantity) => dispatch(addToCart(id, inventoryQuantity))
-    };
+  return {
+    addToCart: (id, inventoryQuantity) =>
+      dispatch(addToCart(id, inventoryQuantity)),
+  };
 };
 
 export default connect(mapState, mapDispatch)(SingleProduct);

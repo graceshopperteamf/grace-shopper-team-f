@@ -1,9 +1,9 @@
-const router = require("express").Router();
-const { Op } = require("sequelize");
-const adminMiddleware = require("./adminMiddleware");
-const { Artist, Product, productKeys } = require("../db/models");
+const router = require('express').Router();
+const { Op } = require('sequelize');
+const adminMiddleware = require('./adminMiddleware');
+const { Artist, Product, productKeys } = require('../db/models');
 
-router.get("/", async (req, res, next) => {
+router.get('/', async (req, res, next) => {
     try {
         const products = await Product.findAll({ include: [Artist] });
         res.status(200).json(products);
@@ -12,7 +12,7 @@ router.get("/", async (req, res, next) => {
     }
 });
 
-router.post("/", async (req, res, next) => {
+router.post('/', async (req, res, next) => {
     console.log(req.body);
     const { id } = req.body;
     try {
@@ -31,7 +31,7 @@ router.post("/", async (req, res, next) => {
     }
 });
 
-router.get("/:productId", async (req, res, next) => {
+router.get('/:productId', async (req, res, next) => {
     try {
         const product = await Product.findByPk(req.params.productId, {
             include: [Artist],
@@ -42,7 +42,7 @@ router.get("/:productId", async (req, res, next) => {
     }
 });
 
-router.delete("/:productId", adminMiddleware, async (req, res, next) => {
+router.delete('/:productId', adminMiddleware, async (req, res, next) => {
     try {
         await Product.destroy({ where: { id: req.params.productId } });
         res.status(204).end();
@@ -51,7 +51,7 @@ router.delete("/:productId", adminMiddleware, async (req, res, next) => {
     }
 });
 
-router.put("/:productId", adminMiddleware, async (req, res, next) => {
+router.put('/:productId', adminMiddleware, async (req, res, next) => {
     try {
         let product = await Product.findByPk(req.params.productId, {
             include: [Artist],
